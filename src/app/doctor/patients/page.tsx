@@ -104,7 +104,7 @@ export default async function DoctorPatientsPage() {
               <div className="flex gap-3">
                 <button className="flex-1 bg-primary/5 hover:bg-primary text-primary hover:text-white py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2">
                   <Calendar size={14} />
-                  Book Again
+                  Schedule Follow-up
                 </button>
                 <button className="p-2.5 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-xl transition-colors">
                   <MessageSquare size={16} />
