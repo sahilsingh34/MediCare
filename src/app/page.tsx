@@ -188,8 +188,8 @@ export default function LandingPage() {
                 {/* Floating Card */}
                 <div className="absolute bottom-6 left-6 right-6 premium-card p-4 flex items-center gap-4 animate-bounce-slow">
                   <div className="flex -space-x-3">
-                    <img className="w-10 h-10 rounded-full border-2 border-white" src="https://images.unsplash.com/photo-1594824436998-d40df9f00028?auto=format&fit=crop&w=100&q=80" alt="Doctor" />
-                    <img className="w-10 h-10 rounded-full border-2 border-white" src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=100&q=80" alt="Doctor" />
+                    <img className="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=100&q=80" alt="Doctor" />
+                    <img className="w-10 h-10 rounded-full border-2 border-white object-cover" src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=100&q=80" alt="Doctor" />
                     <div className="w-10 h-10 rounded-full border-2 border-white bg-primary text-white flex items-center justify-center text-xs font-bold">+5</div>
                   </div>
                   <div>
