@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-primary: #4F46E5; /* Indigo 600 */
+  --color-primary-hover: #4338CA; /* Indigo 700 */
+  --color-primary-light: #EEF2FF; /* Indigo 50 */
+  --color-background: #F9FAFB; /* Gray 50 */
+  --color-surface: #FFFFFF;
+  --color-text-dark: #1F2937; /* Gray 800 */
+  --color-text-gray: #6B7280; /* Gray 500 */
+  --color-success: #10B981; /* Emerald 500 */
+  --color-success-light: #D1FAE5; /* Emerald 100 */
+  --color-warning: #F59E0B; /* Amber 500 */
+  --color-warning-light: #FEF3C7; /* Amber 100 */
+  --color-danger: #EF4444; /* Red 500 */
+  --color-danger-light: #FEE2E2; /* Red 100 */
+  
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --background: #F9FAFB;
+  --foreground: #1F2937;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0F172A; /* Slate 900 */
+    --foreground: #F8FAFC; /* Slate 50 */
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Premium UI Utility Classes */
+.glass-panel {
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+}
+
+.glass-panel-dark {
+  background-color: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.premium-shadow {
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.05);
+}
+
+.premium-card {
+  background-color: var(--color-surface);
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: all 300ms ease-in-out;
+}
+
+
+
