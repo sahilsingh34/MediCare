@@ -11,7 +11,6 @@ import { Suspense } from "react";
 export default async function DoctorsPage({ 
   searchParams 
 }: { 
-}: { 
   searchParams: Promise<{ q?: string; location?: string }> 
 }) {
   // Ensure user is synced
