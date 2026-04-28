@@ -82,7 +82,11 @@ export default async function PatientHome() {
           {topDoctors.slice(0, 4).map((doc: any) => (
             <div key={doc.id} className="premium-card group hover:border-primary/20 border border-transparent overflow-hidden">
               <div className="relative h-48 bg-gray-100 overflow-hidden">
-                <img src={doc.users.image_url || 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=300&q=80'} alt={doc.users.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <img 
+                  src={doc.image_url || doc.users.image_url || 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=300&q=80'} 
+                  alt={doc.users.name} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                />
                 <button className="absolute top-3 right-3 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-400 hover:text-rose-500 hover:bg-white transition-colors">
                   <Heart size={16} />
                 </button>

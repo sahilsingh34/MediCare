@@ -60,19 +60,26 @@ export default function DoctorSettingsPage() {
     setIsUploading(true);
     setError(null);
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const result = await uploadDoctorPhoto(formData);
-      if (result.success && result.url) {
-        setImageUrl(result.url);
-      } else {
-        setError(result.error || "Upload failed");
-      }
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = async () => {
+        const base64Data = reader.result as string;
+        const result = await uploadDoctorPhoto(base64Data, file.name, file.type);
+        
+        if (result.success && result.url) {
+          setImageUrl(result.url);
+        } else {
+          setError(result.error || "Upload failed");
+        }
+        setIsUploading(false);
+      };
+      reader.onerror = () => {
+        setError("Failed to read file.");
+        setIsUploading(false);
+      };
     } catch (err: any) {
       console.error("Settings upload error:", err);
       setError("Failed to upload photo. Please try again.");
-    } finally {
       setIsUploading(false);
     }
   };

@@ -4,39 +4,24 @@ import { getSupabaseAdmin } from "@/lib/supabase";
 import { syncUserToDatabase } from "./user";
 import { revalidatePath } from "next/cache";
 
-export async function uploadDoctorPhoto(formData: FormData) {
+export async function uploadDoctorPhoto(base64Data: string, fileName: string, fileType: string) {
   try {
     const user = await syncUserToDatabase();
-    if (!user) return { success: false, error: "User not authenticated. Please log in again." };
-
-    const file = formData.get("file") as File;
-    if (!file) return { success: false, error: "No file provided." };
+    if (!user) return { success: false, error: "User not authenticated." };
 
     const supabase = getSupabaseAdmin();
     
-    // Ensure bucket exists
-    console.log("Checking storage bucket 'doctor-profiles'...");
-    const { data: bucketData, error: bucketError } = await supabase.storage.getBucket("doctor-profiles");
+    // Convert base64 to Buffer/Blob
+    const buffer = Buffer.from(base64Data.split(",")[1], "base64");
     
-    if (bucketError && bucketError.message.includes("not found")) {
-      console.log("Bucket not found, creating 'doctor-profiles'...");
-      const { error: createError } = await supabase.storage.createBucket("doctor-profiles", {
-        public: true,
-        allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
-        fileSizeLimit: 5242880 // 5MB
-      });
-      if (createError) throw new Error(`Bucket creation failed: ${createError.message}`);
-    }
+    const fileExt = fileName.split('.').pop();
+    const filePath = `${user.id}-${Date.now()}.${fileExt}`;
 
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${user.id}-${Date.now()}.${fileExt}`;
-    const filePath = `${fileName}`;
-
-    console.log("Uploading file to Supabase:", filePath);
+    console.log("Uploading Base64 file to 'doctor-profiles'...");
     const { data, error } = await (supabase as any).storage
       .from("doctor-profiles")
-      .upload(filePath, file, {
-        contentType: file.type,
+      .upload(filePath, buffer, {
+        contentType: fileType,
         upsert: true
       });
 
@@ -49,11 +34,10 @@ export async function uploadDoctorPhoto(formData: FormData) {
       .from("doctor-profiles")
       .getPublicUrl(filePath);
 
-    console.log("Upload successful:", publicUrl);
     return { success: true, url: publicUrl };
   } catch (err: any) {
     console.error("Global upload action error:", err);
-    return { success: false, error: err.message || "An unexpected server error occurred during upload." };
+    return { success: false, error: err.message || "Server upload error." };
   }
 }
 

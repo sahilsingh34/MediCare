@@ -59,11 +59,12 @@ async function DoctorGrid({ searchParams }: { searchParams: Promise<{ q?: string
         <div key={doc.id} className="premium-card group hover:border-primary/20 border border-transparent overflow-hidden active:scale-[0.99] transition-transform">
           <div className="relative h-48 bg-gray-100 overflow-hidden">
             <Image 
-              src={doc.users.image_url || 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=300&q=80'} 
+              src={doc.image_url || doc.users.image_url || 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=300&q=80'} 
               alt={doc.users.name} 
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-500" 
-              priority={allDoctors.indexOf(doc) < 3}
+              priority={allDoctors.indexOf(doc) < 6}
+              unoptimized={doc.image_url?.includes('supabase')}
             />
             
             <FavoriteButton 

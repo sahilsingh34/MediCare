@@ -45,19 +45,26 @@ export default function DoctorRegisterPage() {
     setIsUploading(true);
     setError(null);
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const result = await uploadDoctorPhoto(formData);
-      if (result.success && result.url) {
-        setUploadedUrl(result.url);
-      } else {
-        setError(result.error || "Failed to upload photo.");
-      }
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = async () => {
+        const base64Data = reader.result as string;
+        const result = await uploadDoctorPhoto(base64Data, file.name, file.type);
+        
+        if (result.success && result.url) {
+          setUploadedUrl(result.url);
+        } else {
+          setError(result.error || "Failed to upload photo.");
+        }
+        setIsUploading(false);
+      };
+      reader.onerror = () => {
+        setError("Failed to read file.");
+        setIsUploading(false);
+      };
     } catch (err: any) {
       console.error("Upload error:", err);
-      setError(`An unexpected error occurred: ${err.message || "Please check your internet connection."}`);
-    } finally {
+      setError(`An unexpected error occurred: ${err.message || "Please try again."}`);
       setIsUploading(false);
     }
   };
