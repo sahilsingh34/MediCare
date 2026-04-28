@@ -12,9 +12,8 @@ export default function HomeSearch() {
 
   const handleSearch = () => {
     const params = new URLSearchParams();
-    if (query) params.append("search", query);
+    if (query) params.append("q", query);
     if (location) params.append("location", location);
-    // Date filtering can be added if needed on doctors page
     router.push(`/patient/doctors?${params.toString()}`);
   };
 

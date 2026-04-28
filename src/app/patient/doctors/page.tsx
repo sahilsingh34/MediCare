@@ -11,7 +11,8 @@ import { Suspense } from "react";
 export default async function DoctorsPage({ 
   searchParams 
 }: { 
-  searchParams: Promise<{ q?: string }> 
+}: { 
+  searchParams: Promise<{ q?: string; location?: string }> 
 }) {
   // Ensure user is synced
   await syncUserToDatabase();
@@ -32,10 +33,10 @@ export default async function DoctorsPage({
   );
 }
 
-async function DoctorGrid({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
-  const { q } = await searchParams;
+async function DoctorGrid({ searchParams }: { searchParams: Promise<{ q?: string; location?: string }> }) {
+  const { q, location } = await searchParams;
   const [allDoctors, favorites] = await Promise.all([
-    getDoctors(q),
+    getDoctors(q, location),
     getFavorites()
   ]);
 

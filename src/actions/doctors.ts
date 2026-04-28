@@ -42,7 +42,7 @@ export async function uploadDoctorPhoto(base64Data: string, fileName: string, fi
 }
 
 
-export async function getDoctors(query?: string) {
+export async function getDoctors(query?: string, location?: string) {
   const supabase = getSupabaseAdmin();
   
   let fetcher = (supabase as any)
@@ -58,6 +58,13 @@ export async function getDoctors(query?: string) {
 
   if (query) {
     fetcher = fetcher.or(`specialization.ilike.%${query}%,users.name.ilike.%${query}%`);
+  }
+
+  if (location) {
+    // Note: Assuming doctors table has a location field, or we might need to add it.
+    // For now, let's filter by a dummy bio match or add the column.
+    // I will add the location column in the next step to the doctors table.
+    fetcher = fetcher.ilike('bio', `%${location}%`); 
   }
 
   const { data: doctors, error } = await fetcher.order('created_at', { ascending: false });

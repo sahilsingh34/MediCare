@@ -99,10 +99,7 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
               <Search className="absolute left-3 top-2.5 text-gray-400" size={16} />
             </div>
             
-            <button className="relative p-2 rounded-full border border-gray-100 hover:bg-gray-50 text-gray-600 transition-colors">
-              <Bell size={18} />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-            </button>
+            <NotificationPopover />
 
             <div className="md:hidden">
               <UserButton />

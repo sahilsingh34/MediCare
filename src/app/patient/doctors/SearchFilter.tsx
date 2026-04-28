@@ -9,17 +9,21 @@ export default function SearchFilter() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("q") || "");
+  const [location, setLocation] = useState(searchParams.get("location") || "");
+  
   const debouncedQuery = useDebounce(query, 500);
+  const debouncedLocation = useDebounce(location, 500);
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
-    if (debouncedQuery) {
-      params.set("q", debouncedQuery);
-    } else {
-      params.delete("q");
-    }
+    if (debouncedQuery) params.set("q", debouncedQuery);
+    else params.delete("q");
+    
+    if (debouncedLocation) params.set("location", debouncedLocation);
+    else params.delete("location");
+
     router.push(`/patient/doctors?${params.toString()}`);
-  }, [debouncedQuery, router, searchParams]);
+  }, [debouncedQuery, debouncedLocation, router, searchParams]);
 
   return (
     <div className="bg-white rounded-2xl p-4 flex flex-col md:flex-row items-center gap-4 shadow-sm border border-gray-100">
@@ -37,7 +41,9 @@ export default function SearchFilter() {
         <MapPin size={18} className="text-gray-400" />
         <input 
           type="text" 
-          placeholder="Location" 
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          placeholder="Search City (e.g. New Delhi)" 
           className="w-full text-sm focus:outline-none bg-transparent text-gray-900" 
         />
       </div>
