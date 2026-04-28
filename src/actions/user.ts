@@ -16,30 +16,28 @@ export async function syncUserToDatabase() {
     .eq("clerk_id", clerkUser.id)
     .single();
 
-  if (!existingUser) {
-    // Check if email matches our hardcoded doctors, otherwise default to patient
-    // For MVP, we'll let people become doctors by updating publicMetadata or manually
-    const role = clerkUser.publicMetadata?.role === "doctor" ? "doctor" : "patient";
-    
-    // Insert user
-    const { data: newUser, error } = await (supabase as any)
-      .from("users")
-      .insert({
-        clerk_id: clerkUser.id,
-        role: role,
-        name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'Unknown User',
-        email: clerkUser.emailAddresses[0]?.emailAddress || "",
-        image_url: clerkUser.imageUrl
-      })
-      .select()
-      .single();
+  // Upsert user (Insert if new, Update if exists)
+  const role = clerkUser.publicMetadata?.role === "doctor" ? "doctor" : "patient";
+  
+  const { data: user, error } = await (supabase as any)
+    .from("users")
+    .upsert({
+      clerk_id: clerkUser.id,
+      name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'Unknown User',
+      email: clerkUser.emailAddresses[0]?.emailAddress || "",
+      image_url: clerkUser.imageUrl,
+      // We only set role on initial creation or if it's already set to doctor
+      role: existingUser?.role || role
+    }, {
+      onConflict: 'clerk_id'
+    })
+    .select()
+    .single();
 
-    if (error) {
-      console.error("Error syncing user:", error);
-      return null;
-    }
-    return newUser as any;
+  if (error) {
+    console.error("Error syncing user:", error);
+    return existingUser || null;
   }
 
-  return existingUser as any;
+  return user as any;
 }
