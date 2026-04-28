@@ -115,3 +115,24 @@ export async function convertToDoctor(details: { specialization: string; fees: n
 
   return { success: true };
 }
+
+export async function updateDoctorProfile(details: { specialization?: string; fees?: number; bio?: string; image_url?: string }) {
+  const user = await syncUserToDatabase();
+  if (!user) return { success: false, error: "User not authenticated." };
+
+  const supabase = getSupabaseAdmin();
+
+  const { error } = await (supabase as any)
+    .from("doctors")
+    .update(details)
+    .eq("user_id", user.id);
+
+  if (error) return { success: false, error: error.message };
+
+  revalidatePath("/doctor/profile");
+  revalidatePath("/doctor/settings");
+  revalidatePath("/patient/doctors");
+  
+  return { success: true };
+}
+
