@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -15,10 +16,34 @@ import {
   Smile,
   CheckCircle2
 } from "lucide-react";
-import { SignInButton, SignUpButton, useAuth, UserButton } from "@clerk/nextjs";
+import { SignInButton, SignUpButton, useUser, UserButton } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 export default function LandingPage() {
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, user, isLoaded } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      const role = user?.publicMetadata?.role as string;
+      if (role === 'doctor') {
+        router.push("/doctor/dashboard");
+      } else {
+        router.push("/patient/home");
+      }
+    }
+  }, [isSignedIn, isLoaded, user, router]);
+
+  if (isLoaded && isSignedIn) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-500 font-medium">Redirecting to your portal...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
