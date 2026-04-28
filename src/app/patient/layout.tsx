@@ -82,7 +82,7 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
         {/* Topbar */}
         <header className="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-8 z-10">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Good morning, {user?.firstName || 'Priya'}! 👋</h1>
+            <h1 className="text-xl font-bold text-gray-900">Good morning, {user?.fullName || user?.firstName || 'Patient'}! 👋</h1>
             <p className="text-sm text-gray-500">Book appointments with trusted doctors and take care of your health.</p>
           </div>
 

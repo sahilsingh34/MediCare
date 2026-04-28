@@ -50,7 +50,7 @@ export default function DoctorRegisterPage() {
         <span className="text-xl font-bold text-gray-900">MediCare</span>
       </Link>
 
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl shadow-gray-200/50 p-8 border border-gray-100">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl shadow-gray-200/50 p-8 border border-gray-100 relative z-50">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Join as a Doctor</h1>
           <p className="text-gray-500 text-sm">Fill in your professional details to access the doctor dashboard.</p>
@@ -63,8 +63,8 @@ export default function DoctorRegisterPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
+        <form onSubmit={handleSubmit} className="space-y-6 relative z-50">
+          <div className="relative">
             <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
               <Stethoscope size={16} className="text-primary" />
               Specialization
@@ -73,12 +73,13 @@ export default function DoctorRegisterPage() {
               name="specialization"
               type="text" 
               required
+              autoFocus
               placeholder="e.g. Cardiologist, Dentist"
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-sm"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-sm bg-white cursor-text"
             />
           </div>
 
-          <div>
+          <div className="relative">
             <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
               <IndianRupee size={16} className="text-primary" />
               Consultation Fee (₹)
@@ -88,11 +89,11 @@ export default function DoctorRegisterPage() {
               type="number" 
               required
               placeholder="e.g. 500"
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-sm"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-sm bg-white cursor-text"
             />
           </div>
 
-          <div>
+          <div className="relative">
             <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
               <FileText size={16} className="text-primary" />
               Professional Bio
@@ -102,7 +103,7 @@ export default function DoctorRegisterPage() {
               required
               rows={4}
               placeholder="Briefly describe your experience and expertise..."
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-sm resize-none"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-sm resize-none bg-white cursor-text"
             />
           </div>
 

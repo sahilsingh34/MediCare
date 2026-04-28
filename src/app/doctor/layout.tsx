@@ -29,6 +29,12 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
     { name: "Settings", href: "/doctor/settings", icon: Settings },
   ];
 
+  const isRegisterPage = pathname === "/doctor/register";
+
+  if (isRegisterPage) {
+    return <div className="min-h-screen bg-gray-50">{children}</div>;
+  }
+
   return (
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden">
       {/* Sidebar - Desktop */}
@@ -82,7 +88,7 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
           <div>
             <p className="text-sm text-gray-500 mb-0.5">Welcome back,</p>
             <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-              Dr. {user?.firstName || 'Arjun Sharma'} 👋
+              {user?.fullName || user?.firstName || 'Doctor'} 👋
             </h1>
           </div>
 
@@ -95,8 +101,8 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
             <div className="flex items-center gap-3 pl-6 border-l border-gray-100">
                <UserButton />
                <div className="hidden md:flex flex-col">
-                 <span className="text-sm font-semibold text-gray-900 leading-tight">Dr. {user?.firstName || 'Arjun Sharma'}</span>
-                 <span className="text-xs text-gray-500">{user?.publicMetadata?.specialty as string || 'Cardiologist'}</span>
+                 <span className="text-sm font-semibold text-gray-900 leading-tight">{user?.fullName || user?.firstName || 'Doctor'}</span>
+                 <span className="text-xs text-gray-500">{user?.publicMetadata?.specialty as string || 'Specialist'}</span>
                </div>
             </div>
           </div>
