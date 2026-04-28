@@ -78,7 +78,7 @@ export default function BookAppointmentButton({ doctorId, doctorName, fee }: { d
           ></div>
           
           {/* Modal Container */}
-          <div className="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-max-md overflow-hidden flex flex-col animate-in zoom-in-95 slide-in-from-bottom-10 duration-300 max-w-md">
+          <div className="relative bg-white rounded-[2.5rem] shadow-2xl w-full overflow-hidden flex flex-col animate-in zoom-in-95 slide-in-from-bottom-10 duration-300 max-w-md">
             {/* Header */}
             <div className="flex justify-between items-center p-6 border-b border-gray-50">
               <div>
@@ -198,7 +198,7 @@ export default function BookAppointmentButton({ doctorId, doctorName, fee }: { d
           </div>
         </div>,
         document.body
-      ))}
+      )}
     </>
   );
 }
