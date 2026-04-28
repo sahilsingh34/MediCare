@@ -1,6 +1,7 @@
 "use server";
 
 import { getSupabaseAdmin } from "@/lib/supabase";
+import { syncUserToDatabase } from "./user";
 
 export async function getDoctors() {
   const supabase = getSupabaseAdmin();
