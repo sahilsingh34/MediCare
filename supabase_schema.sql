@@ -18,6 +18,7 @@ CREATE TABLE public.doctors (
     specialization TEXT NOT NULL,
     bio TEXT,
     fees NUMERIC NOT NULL,
+    image_url TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 

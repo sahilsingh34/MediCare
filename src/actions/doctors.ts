@@ -55,7 +55,7 @@ async function seedDoctorsIfEmpty(supabase: any) {
     }
   }
 }
-export async function convertToDoctor(details: { specialization: string; fees: number; bio: string }) {
+export async function convertToDoctor(details: { specialization: string; fees: number; bio: string; imageUrl?: string }) {
   const user = await syncUserToDatabase();
   if (!user) return { success: false, error: "User not authenticated." };
 
@@ -76,7 +76,8 @@ export async function convertToDoctor(details: { specialization: string; fees: n
       user_id: user.id,
       specialization: details.specialization,
       fees: details.fees,
-      bio: details.bio
+      bio: details.bio,
+      image_url: details.imageUrl
     });
 
   if (doctorError) return { success: false, error: doctorError.message };
