@@ -3,6 +3,7 @@
 import { getSupabaseAdmin } from "@/lib/supabase";
 import { currentUser } from "@clerk/nextjs/server";
 import { syncUserToDatabase } from "./user";
+import { revalidatePath } from "next/cache";
 
 export async function bookAppointment(doctorId: string, date: string, time: string, reason: string) {
   const user = await syncUserToDatabase();
@@ -26,6 +27,11 @@ export async function bookAppointment(doctorId: string, date: string, time: stri
     console.error("Booking error:", error);
     return { success: false, error: error.message };
   }
+
+  revalidatePath("/patient/appointments");
+  revalidatePath("/patient/bookings");
+  revalidatePath("/doctor/appointments");
+  revalidatePath("/doctor/dashboard");
 
   return { success: true, data };
 }
