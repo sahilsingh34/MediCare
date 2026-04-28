@@ -14,7 +14,8 @@ import {
   HelpCircle,
   Crown,
   Search,
-  LogOut
+  LogOut,
+  HeartPulse
 } from "lucide-react";
 import NotificationPopover from "@/components/NotificationPopover";
 
