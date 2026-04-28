@@ -29,19 +29,19 @@ export default async function ProfilePage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Header / Banner */}
-      <div className="relative h-48 bg-gradient-to-r from-primary to-blue-400 rounded-3xl overflow-hidden shadow-lg">
+      <div className="relative h-32 md:h-48 bg-gradient-to-r from-primary to-blue-400 rounded-2xl md:rounded-3xl overflow-hidden shadow-lg mx-2 md:mx-0">
         <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px]"></div>
-        <button className="absolute bottom-4 right-4 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-xl text-sm font-medium backdrop-blur-md transition-all border border-white/20 flex items-center gap-2">
-          <Camera size={18} />
-          Change Cover
+        <button className="absolute bottom-3 right-3 md:bottom-4 md:right-4 bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-xl text-xs md:text-sm font-medium backdrop-blur-md transition-all border border-white/20 flex items-center gap-2">
+          <Camera size={16} />
+          <span className="hidden sm:inline">Change Cover</span>
         </button>
       </div>
 
       {/* Profile Info Card */}
-      <div className="relative -mt-24 px-8">
-        <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 p-8 border border-gray-100 flex flex-col md:flex-row gap-8 items-start md:items-center">
+      <div className="relative -mt-16 md:-mt-24 px-4 md:px-8">
+        <div className="bg-white rounded-[2rem] md:rounded-3xl shadow-xl shadow-gray-200/50 p-6 md:p-8 border border-gray-100 flex flex-col md:flex-row gap-6 md:gap-8 items-center md:items-center text-center md:text-left">
           <div className="relative group">
-            <div className="w-32 h-32 rounded-3xl overflow-hidden border-4 border-white shadow-lg relative bg-gray-100">
+            <div className="w-24 h-24 md:w-32 md:h-32 rounded-[2rem] md:rounded-3xl overflow-hidden border-4 border-white shadow-lg relative bg-gray-100">
               <Image 
                 src={user.imageUrl} 
                 alt={user.fullName || "User"}
@@ -49,34 +49,34 @@ export default async function ProfilePage() {
                 className="object-cover"
               />
             </div>
-            <div className="absolute -bottom-2 -right-2 bg-primary text-white p-2 rounded-xl shadow-lg border-2 border-white cursor-pointer hover:scale-110 transition-transform">
-              <Camera size={16} />
+            <div className="absolute -bottom-1 -right-1 bg-primary text-white p-2 rounded-lg md:rounded-xl shadow-lg border-2 border-white cursor-pointer hover:scale-110 transition-transform">
+              <Camera size={14} md:size={16} />
             </div>
           </div>
 
-          <div className="flex-1">
-            <div className="flex justify-between items-start">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-1">{user.fullName}</h1>
-                <p className="text-gray-500 font-medium flex items-center gap-2">
-                  <Mail size={16} />
+          <div className="flex-1 w-full">
+            <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-4">
+              <div className="flex flex-col items-center md:items-start">
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">{user.fullName}</h1>
+                <p className="text-gray-500 font-medium flex items-center gap-2 text-sm break-all text-center md:text-left">
+                  <Mail size={14} className="shrink-0" />
                   {user.primaryEmailAddress?.emailAddress}
                 </p>
               </div>
-              <button className="bg-gray-50 hover:bg-gray-100 text-gray-700 px-4 py-2 rounded-xl text-sm font-semibold transition-all border border-gray-200 flex items-center gap-2">
+              <button className="w-full md:w-auto bg-gray-50 hover:bg-gray-100 text-gray-700 px-4 py-2.5 rounded-xl text-sm font-bold transition-all border border-gray-200 flex items-center justify-center gap-2">
                 <Edit size={16} />
                 Edit Profile
               </button>
             </div>
 
-            <div className="flex gap-4 mt-6">
-              <div className="px-3 py-1 bg-green-50 text-green-600 rounded-lg text-xs font-bold border border-green-100 flex items-center gap-1.5">
-                <Shield size={12} />
-                VERIFIED PATIENT
+            <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-6">
+              <div className="px-3 py-1 bg-green-50 text-green-600 rounded-lg text-[10px] font-bold border border-green-100 flex items-center gap-1.5 uppercase tracking-wider">
+                <Shield size={10} />
+                Verified
               </div>
-              <div className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold border border-blue-100 flex items-center gap-1.5">
-                <Heart size={12} />
-                PREMIUM MEMBER
+              <div className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-bold border border-blue-100 flex items-center gap-1.5 uppercase tracking-wider">
+                <Heart size={10} />
+                Premium
               </div>
             </div>
           </div>
