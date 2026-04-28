@@ -1,8 +1,10 @@
-import { Star, Heart } from "lucide-react";
+import { Star } from "lucide-react";
 import { getDoctors } from "@/actions/doctors";
 import { syncUserToDatabase } from "@/actions/user";
+import { getFavorites } from "@/actions/favorites";
 import BookAppointmentButton from "./BookAppointmentButton";
 import SearchFilter from "./SearchFilter";
+import FavoriteButton from "./FavoriteButton";
 import Image from "next/image";
 
 export default async function DoctorsPage({ 
@@ -14,7 +16,12 @@ export default async function DoctorsPage({
   await syncUserToDatabase();
 
   const { q } = await searchParams;
-  const allDoctors = await getDoctors(q) as any[];
+  const [allDoctors, favorites] = await Promise.all([
+    getDoctors(q),
+    getFavorites()
+  ]);
+
+  const favoriteIds = new Set((favorites as any[]).map(f => f.id));
 
   return (
     <div className="space-y-8 pb-20 md:pb-0">
@@ -35,7 +42,7 @@ export default async function DoctorsPage({
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {allDoctors.map((doc: any) => (
+          {(allDoctors as any[]).map((doc: any) => (
             <div key={doc.id} className="premium-card group hover:border-primary/20 border border-transparent overflow-hidden">
               <div className="relative h-48 bg-gray-100 overflow-hidden">
                 <Image 
@@ -44,9 +51,11 @@ export default async function DoctorsPage({
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500" 
                 />
-                <button className="absolute top-3 right-3 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-400 hover:text-rose-500 hover:bg-white transition-colors">
-                  <Heart size={16} />
-                </button>
+                
+                <FavoriteButton 
+                  doctorId={doc.id} 
+                  initialIsFavorite={favoriteIds.has(doc.id)} 
+                />
               </div>
               <div className="p-5">
                 <div className="flex justify-between items-start mb-1">
