@@ -71,7 +71,7 @@ export default function LandingPage() {
                   <Link href="/patient/home" className="text-sm font-bold text-primary hover:text-primary-hover transition-all hover:scale-105 active:scale-95">
                     Go to Portal
                   </Link>
-                  <UserButton afterSignOutUrl="/" />
+                  <UserButton />
                 </div>
               ) : (
                 <div className="flex items-center gap-4">

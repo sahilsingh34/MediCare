@@ -79,7 +79,7 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
 
           {/* User Profile Summary */}
           <div className="p-4 border-t border-gray-100 flex items-center gap-3">
-            <UserButton afterSignOutUrl="/" />
+            <UserButton />
             <div className="flex flex-col">
               <span className="text-sm font-bold text-gray-900 leading-tight">{user?.firstName || 'Patient'}</span>
               <Link href="/patient/profile" className="text-[10px] font-bold text-primary/60 uppercase tracking-widest hover:underline">View Profile</Link>
