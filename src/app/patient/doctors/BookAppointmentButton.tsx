@@ -1,9 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Calendar, Clock, X, CheckCircle2, Loader2, Stethoscope } from "lucide-center";
-// Re-import icons correctly if needed, but I'll use lucide-react as established
-import { X as CloseIcon, Calendar as CalendarIcon, Clock as ClockIcon, CheckCircle2 as SuccessIcon, Loader2 as SpinnerIcon } from "lucide-react";
+import { X as CloseIcon, Calendar as CalendarIcon, Clock as ClockIcon, CheckCircle2 as SuccessIcon, Loader2 as SpinnerIcon, Stethoscope } from "lucide-react";
 import { bookAppointment } from "@/actions/appointments";
 
 export default function BookAppointmentButton({ doctorId, doctorName, fee }: { doctorId: string, doctorName: string, fee: number }) {
