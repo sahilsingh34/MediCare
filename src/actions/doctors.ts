@@ -33,10 +33,10 @@ export async function uploadDoctorPhoto(formData: FormData) {
 }
 
 
-export async function getDoctors() {
+export async function getDoctors(query?: string) {
   const supabase = getSupabaseAdmin();
   
-  const { data: doctors, error } = await (supabase as any)
+  let fetcher = (supabase as any)
     .from("doctors")
     .select(`
       *,
@@ -45,8 +45,13 @@ export async function getDoctors() {
         image_url,
         email
       )
-    `)
-    .order('created_at', { ascending: false });
+    `);
+
+  if (query) {
+    fetcher = fetcher.or(`specialization.ilike.%${query}%,users.name.ilike.%${query}%`);
+  }
+
+  const { data: doctors, error } = await fetcher.order('created_at', { ascending: false });
 
   if (error) {
     console.error("Error fetching doctors:", error);
