@@ -124,7 +124,7 @@ export default function BookAppointmentButton({ doctorId, doctorName, fee }: { d
                   )}
 
                   <div className="space-y-4">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                    <label className="text-[10px] font-bold text-gray-600 uppercase tracking-widest flex items-center gap-2">
                       <CalendarIcon size={14} className="text-primary" />
                       Select Date
                     </label>
@@ -133,12 +133,12 @@ export default function BookAppointmentButton({ doctorId, doctorName, fee }: { d
                       min={minDate}
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
-                      className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/30 transition-all cursor-pointer"
+                      className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/30 transition-all cursor-pointer text-gray-900"
                     />
                   </div>
                   
                   <div className="space-y-4">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                    <label className="text-[10px] font-bold text-gray-600 uppercase tracking-widest flex items-center gap-2">
                       <ClockIcon size={14} className="text-primary" />
                       Available Slots
                     </label>
@@ -170,7 +170,7 @@ export default function BookAppointmentButton({ doctorId, doctorName, fee }: { d
                       value={reason}
                       onChange={(e) => setReason(e.target.value)}
                       placeholder="Symptoms or reason for visit..."
-                      className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-sm font-semibold focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/30 transition-all resize-none"
+                      className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-sm font-semibold focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary/30 transition-all resize-none text-gray-900"
                     />
                   </div>
                 </div>

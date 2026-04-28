@@ -165,7 +165,7 @@ export default function DoctorSettingsPage() {
                 {/* Professional Fields */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                    <label className="text-[10px] font-bold text-gray-600 uppercase tracking-widest flex items-center gap-2">
                       <Stethoscope size={14} className="text-primary" />
                       Specialization
                     </label>
@@ -173,11 +173,11 @@ export default function DoctorSettingsPage() {
                       type="text" 
                       value={specialization}
                       onChange={(e) => setSpecialization(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all text-sm font-semibold"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all text-sm font-semibold text-gray-900"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                    <label className="text-[10px] font-bold text-gray-600 uppercase tracking-widest flex items-center gap-2">
                       <IndianRupee size={14} className="text-primary" />
                       Consultation Fee (₹)
                     </label>
@@ -185,11 +185,11 @@ export default function DoctorSettingsPage() {
                       type="number" 
                       value={fees}
                       onChange={(e) => setFees(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all text-sm font-semibold"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all text-sm font-semibold text-gray-900"
                     />
                   </div>
                   <div className="md:col-span-2 space-y-2">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                    <label className="text-[10px] font-bold text-gray-600 uppercase tracking-widest flex items-center gap-2">
                       <FileText size={14} className="text-primary" />
                       Professional Biography
                     </label>
@@ -197,7 +197,7 @@ export default function DoctorSettingsPage() {
                       rows={5}
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all text-sm font-semibold resize-none"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-primary/30 focus:ring-4 focus:ring-primary/5 outline-none transition-all text-sm font-semibold resize-none text-gray-900"
                     />
                   </div>
                 </div>
@@ -208,7 +208,7 @@ export default function DoctorSettingsPage() {
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                    <label className="text-[10px] font-bold text-gray-600 uppercase tracking-widest flex items-center gap-2">
                       <User size={14} className="text-primary" />
                       First Name
                     </label>

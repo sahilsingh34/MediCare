@@ -85,7 +85,7 @@ export default function DoctorRegisterPage() {
       <div className="w-full max-w-2xl bg-white rounded-3xl shadow-xl shadow-gray-200/50 p-8 border border-gray-100 relative z-50">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Create Professional Profile</h1>
-          <p className="text-gray-500 text-sm">Join our network of world-class healthcare providers.</p>
+          <p className="text-gray-600 font-medium text-sm">Join our network of world-class healthcare providers.</p>
         </div>
 
         {error && (
@@ -139,7 +139,7 @@ export default function DoctorRegisterPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+              <label className="block text-sm font-bold text-gray-800 mb-2 flex items-center gap-2">
                 <Stethoscope size={16} className="text-primary" />
                 Specialization
               </label>
@@ -149,12 +149,12 @@ export default function DoctorRegisterPage() {
                 required
                 autoFocus
                 placeholder="e.g. Cardiologist, Dentist"
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-sm bg-white cursor-text"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-sm bg-white text-gray-900 placeholder:text-gray-400 cursor-text"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+              <label className="block text-sm font-bold text-gray-800 mb-2 flex items-center gap-2">
                 <IndianRupee size={16} className="text-primary" />
                 Consultation Fee (₹)
               </label>
@@ -163,7 +163,7 @@ export default function DoctorRegisterPage() {
                 type="number" 
                 required
                 placeholder="e.g. 500"
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-sm bg-white cursor-text"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-sm bg-white text-gray-900 placeholder:text-gray-400 cursor-text"
               />
             </div>
           </div>
@@ -171,7 +171,7 @@ export default function DoctorRegisterPage() {
           {/* Right Column: Bio & Submit */}
           <div className="flex flex-col">
             <div className="flex-1 mb-6">
-              <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+              <label className="block text-sm font-bold text-gray-800 mb-2 flex items-center gap-2">
                 <FileText size={16} className="text-primary" />
                 Professional Bio
               </label>
@@ -179,7 +179,7 @@ export default function DoctorRegisterPage() {
                 name="bio"
                 required
                 placeholder="Briefly describe your experience, education, and clinical expertise. This will be shown to patients."
-                className="w-full h-[320px] px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-sm resize-none bg-white cursor-text"
+                className="w-full h-[320px] px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-sm resize-none bg-white text-gray-900 placeholder:text-gray-400 cursor-text"
               />
             </div>
 
