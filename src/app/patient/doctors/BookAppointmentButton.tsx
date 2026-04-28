@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { X as CloseIcon, Calendar as CalendarIcon, Clock as ClockIcon, CheckCircle2 as SuccessIcon, Loader2 as SpinnerIcon, Stethoscope } from "lucide-react";
 import { bookAppointment } from "@/actions/appointments";
 
@@ -13,8 +14,10 @@ export default function BookAppointmentButton({ doctorId, doctorName, fee }: { d
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
   const [minDate, setMinDate] = useState("");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     setMinDate(new Date().toISOString().split('T')[0]);
   }, []);
 
@@ -66,7 +69,7 @@ export default function BookAppointmentButton({ doctorId, doctorName, fee }: { d
         Book Appointment
       </button>
 
-      {isOpen && (
+      {isOpen && mounted && createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           {/* Backdrop */}
           <div 
@@ -75,7 +78,7 @@ export default function BookAppointmentButton({ doctorId, doctorName, fee }: { d
           ></div>
           
           {/* Modal Container */}
-          <div className="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-w-md overflow-hidden flex flex-col animate-in zoom-in-95 slide-in-from-bottom-10 duration-300">
+          <div className="relative bg-white rounded-[2.5rem] shadow-2xl w-full max-max-md overflow-hidden flex flex-col animate-in zoom-in-95 slide-in-from-bottom-10 duration-300 max-w-md">
             {/* Header */}
             <div className="flex justify-between items-center p-6 border-b border-gray-50">
               <div>
@@ -143,6 +146,7 @@ export default function BookAppointmentButton({ doctorId, doctorName, fee }: { d
                       {["09:00 AM", "10:30 AM", "12:00 PM", "02:00 PM", "03:30 PM", "05:00 PM"].map((t) => (
                         <button
                           key={t}
+                          type="button"
                           onClick={() => setTime(t)}
                           className={`py-3 rounded-2xl text-xs font-bold transition-all border ${
                             time === t 
@@ -192,8 +196,9 @@ export default function BookAppointmentButton({ doctorId, doctorName, fee }: { d
               </div>
             )}
           </div>
-        </div>
-      )}
+        </div>,
+        document.body
+      ))}
     </>
   );
 }
