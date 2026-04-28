@@ -17,6 +17,7 @@ import {
   Crown,
   Search
 } from "lucide-react";
+import NotificationPopover from "@/components/NotificationPopover";
 
 export default function PatientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

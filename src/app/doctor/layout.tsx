@@ -16,6 +16,7 @@ import {
   HeartPulse,
   Crown
 } from "lucide-react";
+import NotificationPopover from "@/components/NotificationPopover";
 
 export default function DoctorLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -103,10 +104,7 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
           </div>
 
           <div className="flex items-center gap-3 md:gap-6">
-            <button className="relative p-2 rounded-full border border-gray-100 hover:bg-gray-50 text-gray-600 transition-colors shadow-sm">
-              <Bell size={18} />
-              <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
-            </button>
+            <NotificationPopover />
             
             <div className="flex items-center gap-3 md:pl-6 md:border-l md:border-gray-100">
                <UserButton />
