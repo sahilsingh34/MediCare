@@ -94,14 +94,33 @@ export default function LandingPage() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href={isSignedIn ? "/patient/home" : "/sign-up"} className="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-xl font-medium text-lg transition-all shadow-xl shadow-primary/30 flex items-center justify-center gap-2">
-                  Book Appointment
-                  <Calendar size={20} />
-                </Link>
-                <Link href={isSignedIn ? "/patient/doctors" : "/sign-up"} className="bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 px-8 py-4 rounded-xl font-medium text-lg transition-all flex items-center justify-center gap-2 shadow-sm">
-                  Find Doctors
-                  <Search size={20} />
-                </Link>
+                {isSignedIn ? (
+                  <Link href="/patient/home" className="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-xl font-medium text-lg transition-all shadow-xl shadow-primary/30 flex items-center justify-center gap-2">
+                    Book Appointment
+                    <Calendar size={20} />
+                  </Link>
+                ) : (
+                  <SignUpButton mode="modal">
+                    <button className="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-xl font-medium text-lg transition-all shadow-xl shadow-primary/30 flex items-center justify-center gap-2">
+                      Book Appointment
+                      <Calendar size={20} />
+                    </button>
+                  </SignUpButton>
+                )}
+
+                {isSignedIn ? (
+                  <Link href="/patient/doctors" className="bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 px-8 py-4 rounded-xl font-medium text-lg transition-all flex items-center justify-center gap-2 shadow-sm">
+                    Find Doctors
+                    <Search size={20} />
+                  </Link>
+                ) : (
+                  <SignUpButton mode="modal">
+                    <button className="bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 px-8 py-4 rounded-xl font-medium text-lg transition-all flex items-center justify-center gap-2 shadow-sm">
+                      Find Doctors
+                      <Search size={20} />
+                    </button>
+                  </SignUpButton>
+                )}
               </div>
 
               {/* Trust Badges */}
