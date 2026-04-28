@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { convertToDoctor } from "@/actions/doctors";
+import { convertToDoctor, uploadDoctorPhoto } from "@/actions/doctors";
 import { 
   Stethoscope, 
   IndianRupee, 
@@ -12,7 +12,8 @@ import {
   ArrowRight,
   HeartPulse,
   Camera,
-  Link as LinkIcon
+  Upload,
+  X
 } from "lucide-react";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
@@ -20,9 +21,34 @@ import { useUser } from "@clerk/nextjs";
 export default function DoctorRegisterPage() {
   const { user: clerkUser } = useUser();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [imageUrl, setImageUrl] = useState(clerkUser?.imageUrl || "");
+  const [previewUrl, setPreviewUrl] = useState(clerkUser?.imageUrl || "");
+  const [uploadedUrl, setUploadedUrl] = useState(clerkUser?.imageUrl || "");
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Show local preview immediately
+    const objectUrl = URL.createObjectURL(file);
+    setPreviewUrl(objectUrl);
+
+    // Upload to Supabase
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const result = await uploadDoctorPhoto(formData);
+    if (result.success && result.url) {
+      setUploadedUrl(result.url);
+    } else {
+      setError(result.error || "Failed to upload photo.");
+    }
+    setIsUploading(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,7 +60,7 @@ export default function DoctorRegisterPage() {
       specialization: formData.get("specialization") as string,
       fees: Number(formData.get("fees")),
       bio: formData.get("bio") as string,
-      imageUrl: imageUrl
+      imageUrl: uploadedUrl
     };
 
     const result = await convertToDoctor(details);
@@ -64,7 +90,7 @@ export default function DoctorRegisterPage() {
 
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 text-sm rounded-xl flex items-center gap-2">
-            <CheckCircle2 size={16} className="rotate-45" />
+            <X size={16} className="text-red-500" />
             {error}
           </div>
         )}
@@ -76,35 +102,40 @@ export default function DoctorRegisterPage() {
             <div className="flex flex-col items-center">
               <label className="block text-sm font-semibold text-gray-700 mb-4 self-start flex items-center gap-2">
                 <Camera size={16} className="text-primary" />
-                Profile Photo
+                Professional Photo
               </label>
-              <div className="relative group">
-                <div className="w-32 h-32 rounded-3xl overflow-hidden border-4 border-gray-50 shadow-inner bg-gray-100">
-                  <img 
-                    src={imageUrl || "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=300&q=80"} 
-                    alt="Doctor Preview" 
-                    className="w-full h-full object-cover"
-                  />
+              
+              <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+                <div className="w-40 h-40 rounded-3xl overflow-hidden border-4 border-gray-50 shadow-lg relative bg-gray-100 flex items-center justify-center">
+                  {previewUrl ? (
+                    <img 
+                      src={previewUrl} 
+                      alt="Doctor Preview" 
+                      className={`w-full h-full object-cover ${isUploading ? 'opacity-50' : ''}`}
+                    />
+                  ) : (
+                    <Upload className="text-gray-300" size={40} />
+                  )}
+                  {isUploading && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Loader2 className="animate-spin text-primary" size={32} />
+                    </div>
+                  )}
                 </div>
-                <div className="absolute -bottom-2 -right-2 bg-primary text-white p-2 rounded-xl shadow-lg border-2 border-white cursor-pointer hover:scale-110 transition-transform">
-                  <Camera size={16} />
+                <div className="absolute -bottom-2 -right-2 bg-primary text-white p-3 rounded-2xl shadow-lg border-2 border-white hover:scale-110 transition-transform">
+                  <Upload size={20} />
                 </div>
               </div>
-              <p className="text-[10px] text-gray-400 mt-3 text-center">Using your Clerk profile photo by default</p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                <LinkIcon size={16} className="text-primary" />
-                Custom Image URL (Optional)
-              </label>
               <input 
-                type="text" 
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="https://..."
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-sm bg-white cursor-text"
+                type="file" 
+                ref={fileInputRef} 
+                onChange={handleFileChange} 
+                className="hidden" 
+                accept="image/*"
               />
+              <p className="text-[10px] text-gray-400 mt-4 text-center px-4 italic font-medium">
+                Tip: Use a clear professional headshot with a clean background.
+              </p>
             </div>
 
             <div>
@@ -148,13 +179,13 @@ export default function DoctorRegisterPage() {
                 name="bio"
                 required
                 placeholder="Briefly describe your experience, education, and clinical expertise. This will be shown to patients."
-                className="w-full h-[280px] px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-sm resize-none bg-white cursor-text"
+                className="w-full h-[320px] px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-sm resize-none bg-white cursor-text"
               />
             </div>
 
             <button 
               type="submit" 
-              disabled={isSubmitting}
+              disabled={isSubmitting || isUploading}
               className="w-full bg-primary hover:bg-primary-hover text-white py-4 rounded-xl font-bold transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed mt-auto"
             >
               {isSubmitting ? (

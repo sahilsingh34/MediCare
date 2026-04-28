@@ -5,14 +5,21 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+let adminClient: ReturnType<typeof createClient> | null = null;
+
 export function getSupabaseAdmin() {
+  if (adminClient) return adminClient;
+
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
     throw new Error("Missing SUPABASE_SERVICE_ROLE_KEY");
   }
-  return createClient(supabaseUrl, process.env.SUPABASE_SERVICE_ROLE_KEY, {
+  
+  adminClient = createClient(supabaseUrl, process.env.SUPABASE_SERVICE_ROLE_KEY, {
     auth: {
       autoRefreshToken: false,
       persistSession: false
     }
   });
+  
+  return adminClient;
 }

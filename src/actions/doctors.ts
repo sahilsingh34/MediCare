@@ -2,16 +2,40 @@
 
 import { getSupabaseAdmin } from "@/lib/supabase";
 import { syncUserToDatabase } from "./user";
+import { revalidatePath } from "next/cache";
+
+export async function uploadDoctorPhoto(formData: FormData) {
+  const user = await syncUserToDatabase();
+  if (!user) return { success: false, error: "User not authenticated." };
+
+  const file = formData.get("file") as File;
+  if (!file) return { success: false, error: "No file provided." };
+
+  const supabase = getSupabaseAdmin();
+  const fileExt = file.name.split('.').pop();
+  const fileName = `${user.id}-${Math.random()}.${fileExt}`;
+  const filePath = `${fileName}`;
+
+  const { data, error } = await supabase.storage
+    .from("doctor-profiles")
+    .upload(filePath, file);
+
+  if (error) {
+    console.error("Upload error:", error);
+    return { success: false, error: error.message };
+  }
+
+  const { data: { publicUrl } } = supabase.storage
+    .from("doctor-profiles")
+    .getPublicUrl(filePath);
+
+  return { success: true, url: publicUrl };
+}
+
 
 export async function getDoctors() {
   const supabase = getSupabaseAdmin();
   
-  // Try to seed if empty
-  const { data: check } = await supabase.from("doctors").select("id").limit(1);
-  if (!check || check.length === 0) {
-    await seedDoctorsIfEmpty(supabase);
-  }
-
   const { data: doctors, error } = await supabase
     .from("doctors")
     .select(`
@@ -21,7 +45,8 @@ export async function getDoctors() {
         image_url,
         email
       )
-    `);
+    `)
+    .order('created_at', { ascending: false });
 
   if (error) {
     console.error("Error fetching doctors:", error);

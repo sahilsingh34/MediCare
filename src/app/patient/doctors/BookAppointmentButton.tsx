@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calendar, Clock, X, CheckCircle2, Loader2 } from "lucide-react";
 import { bookAppointment } from "@/actions/appointments";
 
@@ -12,6 +12,11 @@ export default function BookAppointmentButton({ doctorId, doctorName, fee }: { d
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [minDate, setMinDate] = useState("");
+
+  useEffect(() => {
+    setMinDate(new Date().toISOString().split('T')[0]);
+  }, []);
 
   const handleBook = async () => {
     if (!date || !time) {
@@ -90,7 +95,7 @@ export default function BookAppointmentButton({ doctorId, doctorName, fee }: { d
                     <label className="text-sm font-semibold text-gray-700">Select Date</label>
                     <input 
                       type="date" 
-                      min={new Date().toISOString().split('T')[0]}
+                      min={minDate}
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
                       className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
@@ -141,7 +146,7 @@ export default function BookAppointmentButton({ doctorId, doctorName, fee }: { d
                 <button 
                   onClick={handleBook}
                   disabled={isSubmitting}
-                  className="flex-1 bg-primary hover:bg-primary-hover disabled:bg-primary/50 disabled:cursor-not-allowed text-white px-4 py-2.5 rounded-xl text-sm font-medium transition-colors flex justify-center items-center gap-2"
+                  className="flex-1 bg-primary hover:bg-primary-hover disabled:bg-primary/50 disabled:cursor-not-allowed text-white px-4 py-2.5 rounded-xl text-sm font-medium transition-all flex justify-center items-center gap-2 active:scale-95"
                 >
                   {isSubmitting && <Loader2 size={16} className="animate-spin" />}
                   Confirm Booking
