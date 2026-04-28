@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, X, Clock, Loader2, Mail, Calendar } from "lucide-react";
+import { Check, X, Clock, Loader2, Mail, Calendar, History, MessageSquare, ExternalLink, Activity } from "lucide-react";
 import { updateAppointmentStatus } from "@/actions/appointments";
 
 export default function AppointmentsTable({ initialAppointments }: { initialAppointments: any[] }) {
@@ -26,12 +26,12 @@ export default function AppointmentsTable({ initialAppointments }: { initialAppo
       <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-gray-100 text-sm text-gray-400">
-              <th className="pb-4 font-medium pl-2">Patient</th>
-              <th className="pb-4 font-medium">Date & Time</th>
-              <th className="pb-4 font-medium">Reason</th>
-              <th className="pb-4 font-medium">Status</th>
-              <th className="pb-4 font-medium text-right pr-2">Action</th>
+            <tr className="border-b border-gray-100 text-[11px] uppercase tracking-widest text-gray-400 font-bold">
+              <th className="pb-4 pl-2">Patient Details</th>
+              <th className="pb-4">Schedule</th>
+              <th className="pb-4">Symptoms / Reason</th>
+              <th className="pb-4">Status</th>
+              <th className="pb-4 text-right pr-2">Clinical Actions</th>
             </tr>
           </thead>
           <tbody className="text-sm">
@@ -59,8 +59,14 @@ export default function AppointmentsTable({ initialAppointments }: { initialAppo
                       <span className="text-xs flex items-center gap-1 text-primary mt-0.5"><Clock size={12}/> {apt.time}</span>
                     </div>
                   </td>
-                  <td className="py-4 text-gray-600 truncate max-w-[150px]">
-                    Consultation
+                  <td className="py-4">
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-gray-700 bg-gray-50 w-fit px-2 py-0.5 rounded-md">
+                        <Activity size={10} className="text-primary" />
+                        General Consultation
+                      </div>
+                      <span className="text-[10px] text-gray-400 font-medium ml-0.5">Persistent headache and fatigue</span>
+                    </div>
                   </td>
                   <td className="py-4">
                     <span className={`px-2.5 py-1 rounded-full text-xs font-semibold flex inline-flex items-center gap-1 w-fit
@@ -76,35 +82,45 @@ export default function AppointmentsTable({ initialAppointments }: { initialAppo
                     </span>
                   </td>
                   <td className="py-4 text-right pr-2">
-                    <div className="flex justify-end gap-2">
+                    <div className="flex justify-end gap-2 items-center">
                       {loadingId === apt.id ? (
-                        <Loader2 size={18} className="animate-spin text-gray-400" />
+                        <Loader2 size={18} className="animate-spin text-primary" />
                       ) : apt.status === 'pending' ? (
                         <>
                           <button 
                             onClick={() => handleStatusUpdate(apt.id, 'accepted')}
-                            className="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center hover:bg-green-500 hover:text-white transition-colors"
-                            title="Accept"
+                            className="p-2 rounded-xl bg-green-50 text-green-600 hover:bg-green-500 hover:text-white transition-all shadow-sm border border-green-100"
+                            title="Accept Appointment"
                           >
-                            <Check size={16} />
+                            <Check size={16} strokeWidth={3} />
                           </button>
                           <button 
                             onClick={() => handleStatusUpdate(apt.id, 'rejected')}
-                            className="w-8 h-8 rounded-full bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-500 hover:text-white transition-colors"
-                            title="Reject"
+                            className="p-2 rounded-xl bg-red-50 text-red-600 hover:bg-red-500 hover:text-white transition-all shadow-sm border border-red-100"
+                            title="Decline"
                           >
-                            <X size={16} />
+                            <X size={16} strokeWidth={3} />
                           </button>
                         </>
-                      ) : apt.status === 'accepted' ? (
-                         <button 
-                            onClick={() => handleStatusUpdate(apt.id, 'completed')}
-                            className="px-3 py-1.5 rounded-lg bg-primary/10 text-primary text-xs font-semibold hover:bg-primary hover:text-white transition-colors"
-                          >
-                            Mark Complete
-                          </button>
                       ) : (
-                        <span className="text-xs text-gray-400 font-medium">Done</span>
+                        <div className="flex items-center gap-1.5">
+                          <button className="p-2 rounded-xl bg-gray-50 text-gray-500 hover:bg-primary/10 hover:text-primary transition-all border border-gray-100" title="Patient History">
+                            <History size={16} />
+                          </button>
+                          <button className="p-2 rounded-xl bg-gray-50 text-gray-500 hover:bg-primary/10 hover:text-primary transition-all border border-gray-100" title="Send Message">
+                            <MessageSquare size={16} />
+                          </button>
+                          {apt.status === 'accepted' ? (
+                            <button 
+                              onClick={() => handleStatusUpdate(apt.id, 'completed')}
+                              className="ml-1 px-4 py-2 rounded-xl bg-primary text-white text-[11px] font-black uppercase tracking-wider hover:bg-primary-hover shadow-lg shadow-primary/20 transition-all active:scale-95"
+                            >
+                              Finalize
+                            </button>
+                          ) : (
+                            <span className="ml-2 text-[10px] font-black text-gray-300 uppercase tracking-widest border-2 border-gray-100 px-3 py-1 rounded-lg">Archived</span>
+                          )}
+                        </div>
                       )}
                     </div>
                   </td>
@@ -170,28 +186,34 @@ export default function AppointmentsTable({ initialAppointments }: { initialAppo
                   <>
                     <button 
                       onClick={() => handleStatusUpdate(apt.id, 'accepted')}
-                      className="flex-1 py-2.5 rounded-xl bg-green-50 text-green-600 font-bold text-xs hover:bg-green-500 hover:text-white transition-all flex items-center justify-center gap-2"
+                      className="flex-1 py-2.5 rounded-xl bg-green-50 text-green-600 font-bold text-xs hover:bg-green-500 hover:text-white transition-all flex items-center justify-center gap-2 border border-green-100"
                     >
                       <Check size={14} /> Accept
                     </button>
                     <button 
                       onClick={() => handleStatusUpdate(apt.id, 'rejected')}
-                      className="flex-1 py-2.5 rounded-xl bg-red-50 text-red-600 font-bold text-xs hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2"
+                      className="flex-1 py-2.5 rounded-xl bg-red-50 text-red-600 font-bold text-xs hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2 border border-red-100"
                     >
                       <X size={14} /> Reject
                     </button>
                   </>
-                ) : apt.status === 'accepted' ? (
-                   <button 
-                      onClick={() => handleStatusUpdate(apt.id, 'completed')}
-                      className="flex-1 py-2.5 rounded-xl bg-primary text-white font-bold text-xs shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2"
-                    >
-                      Mark as Completed
-                    </button>
                 ) : (
-                  <button disabled className="flex-1 py-2.5 rounded-xl bg-gray-50 text-gray-400 font-bold text-xs">
-                    Appointment Closed
-                  </button>
+                  <div className="flex-1 flex gap-2">
+                    <button className="p-3 rounded-xl bg-gray-50 text-gray-500 border border-gray-100 flex-1 flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-wider">
+                      <History size={14} /> History
+                    </button>
+                    <button className="p-3 rounded-xl bg-gray-50 text-gray-500 border border-gray-100 flex-1 flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-wider">
+                      <MessageSquare size={14} /> Chat
+                    </button>
+                    {apt.status === 'accepted' && (
+                      <button 
+                        onClick={() => handleStatusUpdate(apt.id, 'completed')}
+                        className="flex-[1.5] py-3 rounded-xl bg-primary text-white font-black text-[10px] uppercase tracking-wider shadow-lg shadow-primary/20"
+                      >
+                        Finalize
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
