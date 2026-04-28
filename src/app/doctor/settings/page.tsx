@@ -51,6 +51,11 @@ export default function DoctorSettingsPage() {
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    
+    if (file.size > 4.5 * 1024 * 1024) {
+      setError("File is too large. Please select an image smaller than 4.5MB.");
+      return;
+    }
 
     setIsUploading(true);
     setError(null);

@@ -5,13 +5,13 @@ import { syncUserToDatabase } from "./user";
 import { revalidatePath } from "next/cache";
 
 export async function uploadDoctorPhoto(formData: FormData) {
-  const user = await syncUserToDatabase();
-  if (!user) return { success: false, error: "User not authenticated." };
-
-  const file = formData.get("file") as File;
-  if (!file) return { success: false, error: "No file provided." };
-
   try {
+    const user = await syncUserToDatabase();
+    if (!user) return { success: false, error: "User not authenticated. Please log in again." };
+
+    const file = formData.get("file") as File;
+    if (!file) return { success: false, error: "No file provided." };
+
     const supabase = getSupabaseAdmin();
     
     // Ensure bucket exists
@@ -42,7 +42,7 @@ export async function uploadDoctorPhoto(formData: FormData) {
 
     if (error) {
       console.error("Supabase storage error:", error);
-      return { success: false, error: `Upload failed: ${error.message}` };
+      return { success: false, error: `Storage upload failed: ${error.message}` };
     }
 
     const { data: { publicUrl } } = supabase.storage
@@ -53,7 +53,7 @@ export async function uploadDoctorPhoto(formData: FormData) {
     return { success: true, url: publicUrl };
   } catch (err: any) {
     console.error("Global upload action error:", err);
-    return { success: false, error: err.message || "An unexpected server error occurred." };
+    return { success: false, error: err.message || "An unexpected server error occurred during upload." };
   }
 }
 

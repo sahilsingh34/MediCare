@@ -32,6 +32,11 @@ export default function DoctorRegisterPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    if (file.size > 4.5 * 1024 * 1024) {
+      setError("File is too large. Please select an image smaller than 4.5MB.");
+      return;
+    }
+
     // Show local preview immediately
     const objectUrl = URL.createObjectURL(file);
     setPreviewUrl(objectUrl);
@@ -51,7 +56,7 @@ export default function DoctorRegisterPage() {
       }
     } catch (err: any) {
       console.error("Upload error:", err);
-      setError("An unexpected error occurred during upload.");
+      setError(`An unexpected error occurred: ${err.message || "Please check your internet connection."}`);
     } finally {
       setIsUploading(false);
     }
