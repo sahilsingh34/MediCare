@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { UserButton, useUser } from "@clerk/nextjs";
+import { UserButton, useUser, SignOutButton } from "@clerk/nextjs";
 import { 
   Home, 
   Stethoscope, 
@@ -12,10 +12,9 @@ import {
   User, 
   Settings, 
   HelpCircle,
-  Bell,
-  HeartPulse,
   Crown,
-  Search
+  Search,
+  LogOut
 } from "lucide-react";
 import NotificationPopover from "@/components/NotificationPopover";
 
@@ -70,12 +69,21 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
 
 
 
-        {/* User Profile Summary */}
-        <div className="p-4 border-t border-gray-100 flex items-center gap-3">
-          <UserButton />
-          <div className="flex flex-col">
-            <span className="text-sm font-semibold text-gray-900">{user?.firstName || 'Patient'}</span>
-            <span className="text-xs text-gray-500 cursor-pointer">View Profile</span>
+        <div className="px-4 mt-auto mb-4 space-y-4">
+          <SignOutButton>
+            <button className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold text-gray-500 hover:text-red-600 hover:bg-red-50 transition-all duration-300 hover:translate-x-1">
+              <LogOut size={18} className="text-gray-400 group-hover:text-red-500" />
+              Logout
+            </button>
+          </SignOutButton>
+
+          {/* User Profile Summary */}
+          <div className="p-4 border-t border-gray-100 flex items-center gap-3">
+            <UserButton afterSignOutUrl="/" />
+            <div className="flex flex-col">
+              <span className="text-sm font-bold text-gray-900 leading-tight">{user?.firstName || 'Patient'}</span>
+              <Link href="/patient/profile" className="text-[10px] font-bold text-primary/60 uppercase tracking-widest hover:underline">View Profile</Link>
+            </div>
           </div>
         </div>
       </aside>

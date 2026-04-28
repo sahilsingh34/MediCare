@@ -54,7 +54,7 @@ export default function DoctorRegisterPage() {
 
     try {
       const fileExt = file.name.split('.').pop();
-      const fileName = `${user?.id || 'temp'}-${Date.now()}.${fileExt}`;
+      const fileName = `${clerkUser?.id || 'temp'}-${Date.now()}.${fileExt}`;
       const filePath = `${fileName}`;
 
       console.log("Attempting direct client-side upload...");
