@@ -44,26 +44,40 @@ export default function DoctorRegisterPage() {
     // Upload to Supabase
     setIsUploading(true);
     setError(null);
+    
+    // Safety timeout to prevent infinite loading
+    const timeout = setTimeout(() => {
+      setIsUploading(false);
+      setError("Upload timed out. Please check your internet connection or try a smaller image.");
+    }, 15000); // 15s timeout
+
     try {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = async () => {
-        const base64Data = reader.result as string;
-        const result = await uploadDoctorPhoto(base64Data, file.name, file.type);
-        
-        if (result.success && result.url) {
-          setUploadedUrl(result.url);
-        } else {
-          setError(result.error || "Failed to upload photo.");
+        try {
+          const base64Data = reader.result as string;
+          const result = await uploadDoctorPhoto(base64Data, file.name, file.type);
+          
+          if (result.success && result.url) {
+            setUploadedUrl(result.url);
+          } else {
+            setError(result.error || "Failed to upload photo.");
+          }
+        } catch (err: any) {
+          setError("Server communication failed.");
+        } finally {
+          clearTimeout(timeout);
+          setIsUploading(false);
         }
-        setIsUploading(false);
       };
       reader.onerror = () => {
+        clearTimeout(timeout);
         setError("Failed to read file.");
         setIsUploading(false);
       };
     } catch (err: any) {
-      console.error("Upload error:", err);
+      clearTimeout(timeout);
       setError(`An unexpected error occurred: ${err.message || "Please try again."}`);
       setIsUploading(false);
     }

@@ -59,26 +59,40 @@ export default function DoctorSettingsPage() {
 
     setIsUploading(true);
     setError(null);
+
+    // Safety timeout to prevent infinite loading
+    const timeout = setTimeout(() => {
+      setIsUploading(false);
+      setError("Upload timed out. The server is taking longer than expected.");
+    }, 15000); // 15s timeout
+
     try {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = async () => {
-        const base64Data = reader.result as string;
-        const result = await uploadDoctorPhoto(base64Data, file.name, file.type);
-        
-        if (result.success && result.url) {
-          setImageUrl(result.url);
-        } else {
-          setError(result.error || "Upload failed");
+        try {
+          const base64Data = reader.result as string;
+          const result = await uploadDoctorPhoto(base64Data, file.name, file.type);
+          
+          if (result.success && result.url) {
+            setImageUrl(result.url);
+          } else {
+            setError(result.error || "Upload failed");
+          }
+        } catch (err: any) {
+          setError("Communication with server failed.");
+        } finally {
+          clearTimeout(timeout);
+          setIsUploading(false);
         }
-        setIsUploading(false);
       };
       reader.onerror = () => {
+        clearTimeout(timeout);
         setError("Failed to read file.");
         setIsUploading(false);
       };
     } catch (err: any) {
-      console.error("Settings upload error:", err);
+      clearTimeout(timeout);
       setError("Failed to upload photo. Please try again.");
       setIsUploading(false);
     }
