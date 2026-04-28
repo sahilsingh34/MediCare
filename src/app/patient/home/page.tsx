@@ -31,8 +31,8 @@ export default async function PatientHome() {
   return (
     <div className="space-y-10 pb-20 md:pb-0">
       {/* Hero Search Banner */}
-      <div className="relative rounded-[2rem] overflow-hidden bg-primary px-8 py-12 flex items-center justify-between shadow-lg shadow-primary/20">
-        <div className="relative z-10 max-w-lg text-white">
+      <div className="relative rounded-[2rem] overflow-hidden bg-primary px-8 py-12 md:py-20 flex items-center justify-between shadow-lg shadow-primary/20">
+        <div className="relative z-10 max-w-4xl text-white">
           <h2 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 leading-tight">
             Find the right doctor <br className="hidden md:block"/> for your health
           </h2>
