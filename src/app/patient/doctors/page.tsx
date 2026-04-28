@@ -7,7 +7,7 @@ export default async function DoctorsPage() {
   // Ensure user is synced
   await syncUserToDatabase();
 
-  const allDoctors = await getDoctors();
+  const allDoctors = await getDoctors() as any[];
 
   return (
     <div className="space-y-8 pb-20 md:pb-0">

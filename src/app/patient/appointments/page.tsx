@@ -14,7 +14,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default async function AppointmentsPage() {
-  const appointments = await getPatientAppointments();
+  const appointments = await getPatientAppointments() as any[];
   
   // Only show pending and accepted for "Appointments" page (Upcoming)
   const upcomingAppointments = appointments.filter(a => a.status === 'pending' || a.status === 'accepted');

@@ -36,7 +36,7 @@ export async function getPatientAppointments() {
 
   const supabase = getSupabaseAdmin();
   
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("appointments")
     .select(`
       *,
@@ -63,7 +63,7 @@ export async function getDoctorAppointments() {
   const supabase = getSupabaseAdmin();
   
   // First, get the doctor ID for this user
-  const { data: doctor } = await supabase
+  const { data: doctor } = await (supabase as any)
     .from("doctors")
     .select("id")
     .eq("user_id", user.id)
@@ -71,7 +71,7 @@ export async function getDoctorAppointments() {
 
   if (!doctor) return [];
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("appointments")
     .select(`
       *,
@@ -91,7 +91,7 @@ export async function getDoctorAppointments() {
 export async function updateAppointmentStatus(appointmentId: string, status: "accepted" | "rejected" | "completed") {
   const supabase = getSupabaseAdmin();
   
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("appointments")
     .update({ status })
     .eq("id", appointmentId)

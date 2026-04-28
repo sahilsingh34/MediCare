@@ -24,7 +24,7 @@ export default async function DoctorDashboard() {
     redirect("/doctor/register");
   }
 
-  const appointments = await getDoctorAppointments();
+  const appointments = await getDoctorAppointments() as any[];
 
   const stats = [
     { label: "Total Appointments", value: appointments.length, change: "+12% from yesterday", icon: CalendarIcon, color: "text-blue-500", bg: "bg-blue-50" },

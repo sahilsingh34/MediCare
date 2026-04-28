@@ -36,7 +36,7 @@ export async function uploadDoctorPhoto(formData: FormData) {
 export async function getDoctors() {
   const supabase = getSupabaseAdmin();
   
-  const { data: doctors, error } = await supabase
+  const { data: doctors, error } = await (supabase as any)
     .from("doctors")
     .select(`
       *,
@@ -65,7 +65,7 @@ async function seedDoctorsIfEmpty(supabase: any) {
   ];
 
   for (const doc of dummyDoctors) {
-    const { data: user } = await supabase.from("users").insert(doc).select().single();
+    const { data: user } = await (supabase as any).from("users").insert(doc).select().single();
     if (user) {
       const specialties = ["Cardiologist", "Dermatologist", "Gynecologist", "General Physician"];
       const fees = [800, 700, 800, 500];
@@ -88,7 +88,7 @@ export async function convertToDoctor(details: { specialization: string; fees: n
   const supabase = getSupabaseAdmin();
 
   // 1. Update user role in 'users' table
-  const { error: userError } = await supabase
+  const { error: userError } = await (supabase as any)
     .from("users")
     .update({ role: "doctor" })
     .eq("id", user.id);

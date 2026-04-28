@@ -12,7 +12,7 @@ import {
 import Image from "next/image";
 
 export default async function DoctorPatientsPage() {
-  const appointments = await getDoctorAppointments();
+  const appointments = await getDoctorAppointments() as any[];
 
   // Get unique patients from appointments
   const patientsMap = new Map();

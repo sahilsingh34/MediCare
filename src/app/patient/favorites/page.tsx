@@ -13,7 +13,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default async function FavoritesPage() {
-  const favorites = await getFavorites();
+  const favorites = await getFavorites() as any[];
 
   return (
     <div className="space-y-8">

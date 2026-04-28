@@ -15,7 +15,7 @@ import {
 import { getDoctors } from "@/actions/doctors";
 
 export default async function PatientHome() {
-  const topDoctors = await getDoctors();
+  const topDoctors = await getDoctors() as any[];
 
   const specialties = [
     { name: "Cardiologist", icon: Heart, color: "text-rose-500", bg: "bg-rose-50" },

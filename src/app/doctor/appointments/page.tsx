@@ -15,7 +15,7 @@ import Image from "next/image";
 import { revalidatePath } from "next/cache";
 
 export default async function DoctorAppointmentsPage() {
-  const appointments = await getDoctorAppointments();
+  const appointments = await getDoctorAppointments() as any[];
 
   const getStatusColor = (status: string) => {
     switch (status) {

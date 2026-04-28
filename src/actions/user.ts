@@ -10,7 +10,7 @@ export async function syncUserToDatabase() {
   const supabase = getSupabaseAdmin();
 
   // Check if user exists
-  const { data: existingUser } = await supabase
+  const { data: existingUser } = await (supabase as any)
     .from("users")
     .select("*")
     .eq("clerk_id", clerkUser.id)
@@ -22,7 +22,7 @@ export async function syncUserToDatabase() {
     const role = clerkUser.publicMetadata?.role === "doctor" ? "doctor" : "patient";
     
     // Insert user
-    const { data: newUser, error } = await supabase
+    const { data: newUser, error } = await (supabase as any)
       .from("users")
       .insert({
         clerk_id: clerkUser.id,
@@ -38,8 +38,8 @@ export async function syncUserToDatabase() {
       console.error("Error syncing user:", error);
       return null;
     }
-    return newUser;
+    return newUser as any;
   }
 
-  return existingUser;
+  return existingUser as any;
 }

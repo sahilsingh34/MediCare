@@ -13,7 +13,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default async function BookingsPage() {
-  const appointments = await getPatientAppointments();
+  const appointments = await getPatientAppointments() as any[];
 
   const getStatusColor = (status: string) => {
     switch (status) {

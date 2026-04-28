@@ -11,7 +11,7 @@ export async function toggleFavorite(doctorId: string) {
   const supabase = getSupabaseAdmin();
 
   // Check if already favorited
-  const { data: existing } = await supabase
+  const { data: existing } = await (supabase as any)
     .from("favorites")
     .select("id")
     .eq("user_id", user.id)
@@ -20,7 +20,7 @@ export async function toggleFavorite(doctorId: string) {
 
   if (existing) {
     // Remove if exists
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("favorites")
       .delete()
       .eq("id", existing.id);
@@ -28,7 +28,7 @@ export async function toggleFavorite(doctorId: string) {
     if (error) return { success: false, error: error.message };
   } else {
     // Add if doesn't exist
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("favorites")
       .insert({
         user_id: user.id,
@@ -49,7 +49,7 @@ export async function getFavorites() {
 
   const supabase = getSupabaseAdmin();
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("favorites")
     .select(`
       id,
@@ -66,5 +66,5 @@ export async function getFavorites() {
     return [];
   }
 
-  return data.map(f => f.doctors);
+  return data.map((f: any) => f.doctors);
 }
