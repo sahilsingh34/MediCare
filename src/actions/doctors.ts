@@ -16,7 +16,7 @@ export async function uploadDoctorPhoto(formData: FormData) {
   const fileName = `${user.id}-${Math.random()}.${fileExt}`;
   const filePath = `${fileName}`;
 
-  const { data, error } = await supabase.storage
+  const { data, error } = await (supabase as any).storage
     .from("doctor-profiles")
     .upload(filePath, file);
 
@@ -96,7 +96,7 @@ export async function convertToDoctor(details: { specialization: string; fees: n
   if (userError) return { success: false, error: userError.message };
 
   // 2. Create doctor profile in 'doctors' table
-  const { error: doctorError } = await supabase
+  const { error: doctorError } = await (supabase as any)
     .from("doctors")
     .upsert({
       user_id: user.id,

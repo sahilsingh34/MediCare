@@ -10,7 +10,7 @@ export async function bookAppointment(doctorId: string, date: string, time: stri
 
   const supabase = getSupabaseAdmin();
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from("appointments")
     .insert({
       patient_id: user.id,
