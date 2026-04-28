@@ -16,18 +16,21 @@ export async function syncUserToDatabase() {
     .eq("clerk_id", clerkUser.id)
     .single();
 
-  // Upsert user (Insert if new, Update if exists)
-  const role = clerkUser.publicMetadata?.role === "doctor" ? "doctor" : "patient";
-  
-  const { data: user, error } = await (supabase as any)
+    const role = existingUser?.role || (clerkUser.publicMetadata?.role === "doctor" ? "doctor" : "patient");
+    let name = `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'Unknown User';
+    
+    if (role === 'doctor' && !name.startsWith("Dr.")) {
+      name = `Dr. ${name}`;
+    }
+    
+    const { data: user, error } = await (supabase as any)
     .from("users")
     .upsert({
       clerk_id: clerkUser.id,
-      name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'Unknown User',
+      name: name,
       email: clerkUser.emailAddresses[0]?.emailAddress || "",
       image_url: clerkUser.imageUrl,
-      // We only set role on initial creation or if it's already set to doctor
-      role: existingUser?.role || role
+      role: role
     }, {
       onConflict: 'clerk_id'
     })

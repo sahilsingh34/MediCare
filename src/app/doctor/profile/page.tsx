@@ -26,7 +26,14 @@ export default async function DoctorProfilePage() {
   const supabase = getSupabaseAdmin();
   const { data: doctor } = await (supabase as any)
     .from("doctors")
-    .select("*")
+    .select(`
+      *,
+      users (
+        name,
+        email,
+        image_url
+      )
+    `)
     .eq("user_id", (await (supabase as any).from("users").select("id").eq("clerk_id", user.id).single()).data?.id)
     .single();
 
@@ -51,7 +58,7 @@ export default async function DoctorProfilePage() {
             <div className="w-32 h-32 rounded-3xl overflow-hidden border-4 border-white shadow-lg relative bg-gray-100">
               <Image 
                 src={doctor?.image_url || user.imageUrl} 
-                alt={user.fullName || "Doctor"}
+                alt={doctor?.users?.name || user.fullName || "Doctor"}
                 fill
                 className="object-cover"
               />
@@ -61,14 +68,14 @@ export default async function DoctorProfilePage() {
           <div className="flex-1">
             <div className="flex justify-between items-start">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-1">Dr. {user.fullName}</h1>
+                <h1 className="text-3xl font-bold text-gray-900 mb-1">{doctor?.users?.name || user.fullName}</h1>
                 <p className="text-primary font-bold flex items-center gap-2 mb-2">
                   <Stethoscope size={18} />
                   {doctor?.specialization || "General Physician"}
                 </p>
                 <p className="text-sm text-gray-500 font-medium flex items-center gap-2">
                   <Mail size={16} />
-                  {user.primaryEmailAddress?.emailAddress}
+                  {doctor?.users?.email || user.primaryEmailAddress?.emailAddress}
                 </p>
               </div>
               <Link href="/doctor/settings" className="bg-gray-50 hover:bg-gray-100 text-gray-700 px-4 py-2 rounded-xl text-sm font-semibold transition-all border border-gray-200 flex items-center gap-2">

@@ -85,7 +85,7 @@ async function AppointmentsList() {
                 />
               </div>
               <div>
-                <h3 className="font-bold text-gray-900 text-lg group-hover:text-primary transition-colors">Dr. {app.doctors?.users?.name}</h3>
+                <h3 className="font-bold text-gray-900 text-lg group-hover:text-primary transition-colors">{app.doctors?.users?.name}</h3>
                 <p className="text-sm text-gray-500">{app.doctors?.specialization}</p>
                 <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border mt-2 ${getStatusColor(app.status)}`}>
                   {getStatusIcon(app.status)}

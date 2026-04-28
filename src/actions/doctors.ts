@@ -92,10 +92,18 @@ export async function convertToDoctor(details: { specialization: string; fees: n
 
   const supabase = getSupabaseAdmin();
 
-  // 1. Update user role in 'users' table
+  // 1. Update user role and prepend 'Dr.' to name in 'users' table
+  let doctorName = user.name;
+  if (!doctorName.startsWith("Dr.")) {
+    doctorName = `Dr. ${doctorName}`;
+  }
+
   const { error: userError } = await (supabase as any)
     .from("users")
-    .update({ role: "doctor" })
+    .update({ 
+      role: "doctor",
+      name: doctorName 
+    })
     .eq("id", user.id);
 
   if (userError) return { success: false, error: userError.message };

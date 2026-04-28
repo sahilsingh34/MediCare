@@ -50,7 +50,7 @@ export default async function FavoritesPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4 text-white">
                   <p className="text-xs font-bold uppercase tracking-wider text-primary-light mb-1">{doctor.specialization}</p>
-                  <h3 className="text-lg font-bold">Dr. {doctor.users?.name}</h3>
+                  <h3 className="text-lg font-bold">{doctor.users?.name}</h3>
                 </div>
                 <div className="absolute top-4 right-4">
                   <div className="bg-white/20 backdrop-blur-md p-2 rounded-xl border border-white/30 text-red-500">

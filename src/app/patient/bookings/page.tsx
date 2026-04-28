@@ -70,7 +70,7 @@ export default async function BookingsPage() {
                           />
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-gray-900 group-hover:text-primary transition-colors">Dr. {app.doctors?.users?.name}</p>
+                          <p className="text-sm font-bold text-gray-900 group-hover:text-primary transition-colors">{app.doctors?.users?.name}</p>
                           <p className="text-[10px] text-gray-500">{app.doctors?.specialization}</p>
                         </div>
                       </div>
