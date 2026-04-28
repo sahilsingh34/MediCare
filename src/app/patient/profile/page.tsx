@@ -50,7 +50,7 @@ export default async function ProfilePage() {
               />
             </div>
             <div className="absolute -bottom-1 -right-1 bg-primary text-white p-2 rounded-lg md:rounded-xl shadow-lg border-2 border-white cursor-pointer hover:scale-110 transition-transform">
-              <Camera size={14} md:size={16} />
+              <Camera size={16} />
             </div>
           </div>
 
