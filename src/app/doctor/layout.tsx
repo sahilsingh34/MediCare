@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { UserButton, useUser, SignOutButton } from "@clerk/nextjs";
@@ -19,6 +20,11 @@ import {
 export default function DoctorLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { user } = useUser();
+  const [isNavigating, setIsNavigating] = useState(false);
+
+  useEffect(() => {
+    setIsNavigating(false);
+  }, [pathname]);
 
   const navItems = [
     { name: "Dashboard", href: "/doctor/dashboard", icon: LayoutDashboard },
@@ -56,9 +62,12 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
               <Link
                 key={item.name}
                 href={item.href}
+                onClick={() => {
+                  if (pathname !== item.href) setIsNavigating(true);
+                }}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   isActive 
-                    ? "bg-primary/5 text-primary" 
+                    ? "bg-primary/5 text-primary shadow-sm" 
                     : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
                 }`}
               >
@@ -110,8 +119,15 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
         </header>
 
         {/* Page Content */}
-        <div className="flex-1 overflow-y-auto p-4 md:p-8">
-          {children}
+        <div className="flex-1 overflow-y-auto p-4 md:p-8 relative">
+          {isNavigating && (
+            <div className="absolute top-0 left-0 right-0 h-1 z-50">
+              <div className="h-full bg-primary animate-progress-loading"></div>
+            </div>
+          )}
+          <div className={`${isNavigating ? 'opacity-50 pointer-events-none' : 'opacity-100'} transition-opacity duration-200`}>
+            {children}
+          </div>
         </div>
       </main>
 

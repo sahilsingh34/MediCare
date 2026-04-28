@@ -18,13 +18,16 @@ import { syncUserToDatabase } from "@/actions/user";
 import { redirect } from "next/navigation";
 
 export default async function DoctorDashboard() {
-  const user = await syncUserToDatabase();
+  const [user, appointmentsData] = await Promise.all([
+    syncUserToDatabase(),
+    getDoctorAppointments()
+  ]);
+  
+  const appointments = appointmentsData as any[];
   
   if (!user || user.role !== 'doctor') {
     redirect("/doctor/register");
   }
-
-  const appointments = await getDoctorAppointments() as any[];
 
   // Real-time stat calculations
   const stats = [

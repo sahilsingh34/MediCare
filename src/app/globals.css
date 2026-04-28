@@ -92,7 +92,15 @@ body {
   html {
     scroll-behavior: smooth;
   }
+}@layer utilities {
+  @keyframes progress-loading {
+    0% { width: 0; left: 0; }
+    50% { width: 70%; left: 15%; }
+    100% { width: 100%; left: 0; }
+  }
+
+  .animate-progress-loading {
+    animation: progress-loading 1.2s infinite ease-in-out;
+  }
 }
-
-
 
