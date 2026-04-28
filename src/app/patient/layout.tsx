@@ -80,14 +80,17 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-full overflow-hidden relative">
         {/* Topbar */}
-        <header className="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-8 z-10">
+        <header className="h-16 md:h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-4 md:px-8 z-10 sticky top-0">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Good morning, {user?.fullName || user?.firstName || 'Patient'}! 👋</h1>
-            <p className="text-sm text-gray-500">Book appointments with trusted doctors and take care of your health.</p>
+            <h1 className="text-lg md:text-xl font-bold text-gray-900">
+              <span className="hidden md:inline">Good morning, {user?.fullName || user?.firstName || 'Patient'}! 👋</span>
+              <span className="md:hidden">MediCare</span>
+            </h1>
+            <p className="hidden md:block text-sm text-gray-500">Book appointments with trusted doctors and take care of your health.</p>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="relative">
+          <div className="flex items-center gap-3 md:gap-4">
+            <div className="relative hidden lg:block">
               <input 
                 type="text" 
                 placeholder="Search doctors, specialties..." 
@@ -100,6 +103,10 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
               <Bell size={18} />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
             </button>
+
+            <div className="md:hidden">
+              <UserButton />
+            </div>
           </div>
         </header>
 

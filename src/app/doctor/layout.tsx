@@ -84,21 +84,22 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
       {/* Main Content */}
       <main className="flex-1 flex flex-col h-full overflow-hidden relative">
         {/* Topbar */}
-        <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-8 z-10 sticky top-0">
+        <header className="h-16 md:h-20 bg-white border-b border-gray-100 flex items-center justify-between px-4 md:px-8 z-10 sticky top-0">
           <div>
-            <p className="text-sm text-gray-500 mb-0.5">Welcome back,</p>
-            <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-              {user?.fullName || user?.firstName || 'Doctor'} 👋
+            <p className="hidden md:block text-sm text-gray-500 mb-0.5">Welcome back,</p>
+            <h1 className="text-lg md:text-xl font-bold text-gray-900 flex items-center gap-2">
+              <span className="hidden md:inline">{user?.fullName || user?.firstName || 'Doctor'}</span>
+              <span className="md:hidden">MediCare</span> 👋
             </h1>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3 md:gap-6">
             <button className="relative p-2 rounded-full border border-gray-100 hover:bg-gray-50 text-gray-600 transition-colors shadow-sm">
               <Bell size={18} />
-              <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white flex items-center justify-center text-[8px] text-white font-bold">3</span>
+              <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
             </button>
             
-            <div className="flex items-center gap-3 pl-6 border-l border-gray-100">
+            <div className="flex items-center gap-3 md:pl-6 md:border-l md:border-gray-100">
                <UserButton />
                <div className="hidden md:flex flex-col">
                  <span className="text-sm font-semibold text-gray-900 leading-tight">{user?.fullName || user?.firstName || 'Doctor'}</span>
