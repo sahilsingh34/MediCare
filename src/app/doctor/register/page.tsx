@@ -38,16 +38,23 @@ export default function DoctorRegisterPage() {
 
     // Upload to Supabase
     setIsUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
+    setError(null);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
 
-    const result = await uploadDoctorPhoto(formData);
-    if (result.success && result.url) {
-      setUploadedUrl(result.url);
-    } else {
-      setError(result.error || "Failed to upload photo.");
+      const result = await uploadDoctorPhoto(formData);
+      if (result.success && result.url) {
+        setUploadedUrl(result.url);
+      } else {
+        setError(result.error || "Failed to upload photo.");
+      }
+    } catch (err: any) {
+      console.error("Upload error:", err);
+      setError("An unexpected error occurred during upload.");
+    } finally {
+      setIsUploading(false);
     }
-    setIsUploading(false);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

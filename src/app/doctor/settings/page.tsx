@@ -53,16 +53,23 @@ export default function DoctorSettingsPage() {
     if (!file) return;
 
     setIsUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
+    setError(null);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
 
-    const result = await uploadDoctorPhoto(formData);
-    if (result.success && result.url) {
-      setImageUrl(result.url);
-    } else {
-      setError(result.error || "Upload failed");
+      const result = await uploadDoctorPhoto(formData);
+      if (result.success && result.url) {
+        setImageUrl(result.url);
+      } else {
+        setError(result.error || "Upload failed");
+      }
+    } catch (err: any) {
+      console.error("Settings upload error:", err);
+      setError("Failed to upload photo. Please try again.");
+    } finally {
+      setIsUploading(false);
     }
-    setIsUploading(false);
   };
 
   const handleSave = async () => {

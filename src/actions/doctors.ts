@@ -11,39 +11,50 @@ export async function uploadDoctorPhoto(formData: FormData) {
   const file = formData.get("file") as File;
   if (!file) return { success: false, error: "No file provided." };
 
-  const supabase = getSupabaseAdmin();
-  
-  // Ensure bucket exists
-  const { data: bucketData, error: bucketError } = await supabase.storage.getBucket("doctor-profiles");
-  if (bucketError && bucketError.message.includes("not found")) {
-    await supabase.storage.createBucket("doctor-profiles", {
-      public: true,
-      allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
-      fileSizeLimit: 5242880 // 5MB
-    });
+  try {
+    const supabase = getSupabaseAdmin();
+    
+    // Ensure bucket exists
+    console.log("Checking storage bucket 'doctor-profiles'...");
+    const { data: bucketData, error: bucketError } = await supabase.storage.getBucket("doctor-profiles");
+    
+    if (bucketError && bucketError.message.includes("not found")) {
+      console.log("Bucket not found, creating 'doctor-profiles'...");
+      const { error: createError } = await supabase.storage.createBucket("doctor-profiles", {
+        public: true,
+        allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+        fileSizeLimit: 5242880 // 5MB
+      });
+      if (createError) throw new Error(`Bucket creation failed: ${createError.message}`);
+    }
+
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+    const filePath = `${fileName}`;
+
+    console.log("Uploading file to Supabase:", filePath);
+    const { data, error } = await (supabase as any).storage
+      .from("doctor-profiles")
+      .upload(filePath, file, {
+        contentType: file.type,
+        upsert: true
+      });
+
+    if (error) {
+      console.error("Supabase storage error:", error);
+      return { success: false, error: `Upload failed: ${error.message}` };
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from("doctor-profiles")
+      .getPublicUrl(filePath);
+
+    console.log("Upload successful:", publicUrl);
+    return { success: true, url: publicUrl };
+  } catch (err: any) {
+    console.error("Global upload action error:", err);
+    return { success: false, error: err.message || "An unexpected server error occurred." };
   }
-
-  const fileExt = file.name.split('.').pop();
-  const fileName = `${user.id}-${Date.now()}.${fileExt}`;
-  const filePath = `${fileName}`;
-
-  const { data, error } = await (supabase as any).storage
-    .from("doctor-profiles")
-    .upload(filePath, file, {
-      contentType: file.type,
-      upsert: true
-    });
-
-  if (error) {
-    console.error("Upload error:", error);
-    return { success: false, error: error.message };
-  }
-
-  const { data: { publicUrl } } = supabase.storage
-    .from("doctor-profiles")
-    .getPublicUrl(filePath);
-
-  return { success: true, url: publicUrl };
 }
 
 
