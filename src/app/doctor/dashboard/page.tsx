@@ -14,8 +14,16 @@ import {
 } from "lucide-react";
 import { getDoctorAppointments } from "@/actions/appointments";
 import AppointmentsTable from "./AppointmentsTable";
+import { syncUserToDatabase } from "@/actions/user";
+import { redirect } from "next/navigation";
 
 export default async function DoctorDashboard() {
+  const user = await syncUserToDatabase();
+  
+  if (!user || user.role !== 'doctor') {
+    redirect("/doctor/register");
+  }
+
   const appointments = await getDoctorAppointments();
 
   const stats = [

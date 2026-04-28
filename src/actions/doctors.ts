@@ -55,3 +55,31 @@ async function seedDoctorsIfEmpty(supabase: any) {
     }
   }
 }
+export async function convertToDoctor(details: { specialization: string; fees: number; bio: string }) {
+  const user = await syncUserToDatabase();
+  if (!user) return { success: false, error: "User not authenticated." };
+
+  const supabase = getSupabaseAdmin();
+
+  // 1. Update user role in 'users' table
+  const { error: userError } = await supabase
+    .from("users")
+    .update({ role: "doctor" })
+    .eq("id", user.id);
+
+  if (userError) return { success: false, error: userError.message };
+
+  // 2. Create doctor profile in 'doctors' table
+  const { error: doctorError } = await supabase
+    .from("doctors")
+    .upsert({
+      user_id: user.id,
+      specialization: details.specialization,
+      fees: details.fees,
+      bio: details.bio
+    });
+
+  if (doctorError) return { success: false, error: doctorError.message };
+
+  return { success: true };
+}

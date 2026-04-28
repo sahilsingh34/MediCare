@@ -268,7 +268,7 @@ export default function LandingPage() {
               <h4 className="font-semibold text-gray-900 mb-4">Support</h4>
               <ul className="space-y-3 text-sm text-gray-500">
                 <li><Link href="#" className="hover:text-primary transition-colors">Help Center</Link></li>
-                <li><Link href="#" className="hover:text-primary transition-colors">Contact Us</Link></li>
+                <li><Link href="/doctor/register" className="text-primary font-bold hover:underline">Join as Doctor</Link></li>
                 <li><Link href="#" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
                 <li><Link href="#" className="hover:text-primary transition-colors">Terms of Service</Link></li>
               </ul>
