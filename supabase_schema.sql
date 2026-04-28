@@ -56,3 +56,15 @@ CREATE POLICY "Enable all operations for all users" ON public.users FOR ALL USIN
 CREATE POLICY "Enable all operations for all users" ON public.doctors FOR ALL USING (true);
 CREATE POLICY "Enable all operations for all users" ON public.appointments FOR ALL USING (true);
 CREATE POLICY "Enable all operations for all users" ON public.availability FOR ALL USING (true);
+
+-- Favorites table
+CREATE TABLE IF NOT EXISTS public.favorites (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
+    doctor_id UUID REFERENCES public.doctors(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    UNIQUE(user_id, doctor_id)
+);
+
+ALTER TABLE public.favorites ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Enable all operations for all users" ON public.favorites FOR ALL USING (true);
