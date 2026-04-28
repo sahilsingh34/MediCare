@@ -12,13 +12,27 @@ export async function uploadDoctorPhoto(formData: FormData) {
   if (!file) return { success: false, error: "No file provided." };
 
   const supabase = getSupabaseAdmin();
+  
+  // Ensure bucket exists
+  const { data: bucketData, error: bucketError } = await supabase.storage.getBucket("doctor-profiles");
+  if (bucketError && bucketError.message.includes("not found")) {
+    await supabase.storage.createBucket("doctor-profiles", {
+      public: true,
+      allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+      fileSizeLimit: 5242880 // 5MB
+    });
+  }
+
   const fileExt = file.name.split('.').pop();
-  const fileName = `${user.id}-${Math.random()}.${fileExt}`;
+  const fileName = `${user.id}-${Date.now()}.${fileExt}`;
   const filePath = `${fileName}`;
 
   const { data, error } = await (supabase as any).storage
     .from("doctor-profiles")
-    .upload(filePath, file);
+    .upload(filePath, file, {
+      contentType: file.type,
+      upsert: true
+    });
 
   if (error) {
     console.error("Upload error:", error);
@@ -102,7 +116,8 @@ export async function convertToDoctor(details: { specialization: string; fees: n
     .from("users")
     .update({ 
       role: "doctor",
-      name: doctorName 
+      name: doctorName,
+      image_url: details.imageUrl
     })
     .eq("id", user.id);
 
@@ -136,6 +151,14 @@ export async function updateDoctorProfile(details: { specialization?: string; fe
     .eq("user_id", user.id);
 
   if (error) return { success: false, error: error.message };
+
+  // Also update the main users table if image_url changed
+  if (details.image_url) {
+    await (supabase as any)
+      .from("users")
+      .update({ image_url: details.image_url })
+      .eq("id", user.id);
+  }
 
   revalidatePath("/doctor/profile");
   revalidatePath("/doctor/settings");
