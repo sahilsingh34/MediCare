@@ -38,12 +38,14 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
     <div className="flex h-screen bg-background overflow-hidden">
       {/* Sidebar - Desktop */}
       <aside className="hidden md:flex flex-col w-64 border-r border-gray-100 bg-white h-full">
-        <div className="p-6 flex items-center gap-2">
-          <div className="w-8 h-8 bg-primary text-white rounded-lg flex items-center justify-center shadow-md">
-            <HeartPulse size={18} />
+        <div className="p-8 flex items-center gap-3">
+          <div className="w-10 h-10 bg-primary text-white rounded-2xl flex items-center justify-center shadow-lg shadow-primary/30">
+            <HeartPulse size={22} />
           </div>
-          <span className="text-lg font-bold text-gray-900">MediCare</span>
-          <span className="text-[10px] text-gray-500 mt-1 ml-1">Patient Portal</span>
+          <div className="flex flex-col">
+            <span className="text-xl font-black text-gray-900 tracking-tight leading-none">MediCare</span>
+            <span className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mt-1">Patient Elite</span>
+          </div>
         </div>
 
         <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
@@ -53,13 +55,13 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
               <Link
                 key={item.name}
                 href={item.href}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition-all duration-300 group ${
                   isActive 
-                    ? "bg-primary/10 text-primary" 
-                    : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                    ? "bg-primary text-white shadow-lg shadow-primary/25 translate-x-1" 
+                    : "text-gray-500 hover:text-gray-900 hover:bg-gray-50 hover:translate-x-1"
                 }`}
               >
-                <item.icon size={18} className={isActive ? "text-primary" : "text-gray-400"} />
+                <item.icon size={18} className={`${isActive ? "text-white" : "text-gray-400 group-hover:text-primary"} transition-colors`} />
                 {item.name}
               </Link>
             );
@@ -108,8 +110,7 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
           </div>
         </header>
 
-        {/* Page Content */}
-        <div className="flex-1 overflow-y-auto p-8">
+        <div className="flex-1 overflow-y-auto p-6 md:p-10 bg-[#F8FAFC]">
           {children}
         </div>
       </main>

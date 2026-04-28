@@ -2,7 +2,8 @@
 
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { convertToDoctor, uploadDoctorPhoto } from "@/actions/doctors";
+import { convertToDoctor } from "@/actions/doctors";
+import { supabase } from "@/lib/supabase";
 import { 
   Stethoscope, 
   IndianRupee, 
@@ -45,40 +46,40 @@ export default function DoctorRegisterPage() {
     setIsUploading(true);
     setError(null);
     
-    // Safety timeout to prevent infinite loading
+    // Safety timeout
     const timeout = setTimeout(() => {
       setIsUploading(false);
-      setError("Upload timed out. Please check your internet connection or try a smaller image.");
-    }, 15000); // 15s timeout
+      setError("Upload timed out. Direct connection to storage failed.");
+    }, 20000); // 20s for direct upload
 
     try {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = async () => {
-        try {
-          const base64Data = reader.result as string;
-          const result = await uploadDoctorPhoto(base64Data, file.name, file.type);
-          
-          if (result.success && result.url) {
-            setUploadedUrl(result.url);
-          } else {
-            setError(result.error || "Failed to upload photo.");
-          }
-        } catch (err: any) {
-          setError("Server communication failed.");
-        } finally {
-          clearTimeout(timeout);
-          setIsUploading(false);
-        }
-      };
-      reader.onerror = () => {
-        clearTimeout(timeout);
-        setError("Failed to read file.");
-        setIsUploading(false);
-      };
-    } catch (err: any) {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user?.id || 'temp'}-${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      console.log("Attempting direct client-side upload...");
+      const { data, error: storageError } = await supabase.storage
+        .from("doctor-profiles")
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (storageError) {
+        throw new Error(storageError.message);
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from("doctor-profiles")
+        .getPublicUrl(filePath);
+
+      setUploadedUrl(publicUrl);
       clearTimeout(timeout);
-      setError(`An unexpected error occurred: ${err.message || "Please try again."}`);
+      setIsUploading(false);
+    } catch (err: any) {
+      console.error("Direct upload error:", err);
+      setError(`Upload failed: ${err.message || "Connection error."}`);
+      clearTimeout(timeout);
       setIsUploading(false);
     }
   };

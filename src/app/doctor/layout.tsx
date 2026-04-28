@@ -46,13 +46,13 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
     <div className="flex h-screen bg-[#F8FAFC] overflow-hidden">
       {/* Sidebar - Desktop */}
       <aside className="hidden md:flex flex-col w-64 bg-white border-r border-gray-100 shadow-sm z-20">
-        <div className="p-6 flex items-center gap-2 mb-4">
-          <div className="w-8 h-8 bg-primary text-white rounded-lg flex items-center justify-center shadow-md">
-            <HeartPulse size={18} />
+        <div className="p-8 flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 bg-primary text-white rounded-2xl flex items-center justify-center shadow-lg shadow-primary/30">
+            <HeartPulse size={22} />
           </div>
           <div className="flex flex-col">
-            <span className="text-lg font-bold text-gray-900 leading-none">MediCare</span>
-            <span className="text-[10px] text-gray-500 font-medium">Doctor Panel</span>
+            <span className="text-xl font-black text-gray-900 tracking-tight leading-none">MediCare</span>
+            <span className="text-[10px] font-bold text-primary/60 uppercase tracking-widest mt-1">Doctor Elite</span>
           </div>
         </div>
 
@@ -66,13 +66,13 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
                 onClick={() => {
                   if (pathname !== item.href) setIsNavigating(true);
                 }}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold transition-all duration-300 group ${
                   isActive 
-                    ? "bg-primary/5 text-primary shadow-sm" 
-                    : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                    ? "bg-primary text-white shadow-lg shadow-primary/25 translate-x-1" 
+                    : "text-gray-500 hover:text-gray-900 hover:bg-gray-50 hover:translate-x-1"
                 }`}
               >
-                <item.icon size={18} className={isActive ? "text-primary" : "text-gray-400"} />
+                <item.icon size={18} className={`${isActive ? "text-white" : "text-gray-400 group-hover:text-primary"} transition-colors`} />
                 {item.name}
               </Link>
             );
@@ -117,13 +117,13 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
         </header>
 
         {/* Page Content */}
-        <div className="flex-1 overflow-y-auto p-4 md:p-8 relative">
+        <div className="flex-1 overflow-y-auto p-6 md:p-10 relative bg-[#F8FAFC]">
           {isNavigating && (
             <div className="absolute top-0 left-0 right-0 h-1 z-50">
-              <div className="h-full bg-primary animate-progress-loading"></div>
+              <div className="h-full bg-primary shadow-[0_0_15px_rgba(79,70,229,0.5)] animate-progress-loading"></div>
             </div>
           )}
-          <div className={`${isNavigating ? 'opacity-50 pointer-events-none' : 'opacity-100'} transition-opacity duration-200`}>
+          <div className={`${isNavigating ? 'opacity-40 blur-sm pointer-events-none' : 'opacity-100'} transition-all duration-400`}>
             {children}
           </div>
         </div>

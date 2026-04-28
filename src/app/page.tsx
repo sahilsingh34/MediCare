@@ -67,25 +67,25 @@ export default function LandingPage() {
 
             <div className="flex items-center gap-4">
               {isSignedIn ? (
-                <>
-                  <Link href="/patient/home" className="text-sm font-medium text-primary hover:text-primary-hover">
+                <div className="flex items-center gap-6">
+                  <Link href="/patient/home" className="text-sm font-bold text-primary hover:text-primary-hover transition-all hover:scale-105 active:scale-95">
                     Go to Portal
                   </Link>
-                  <UserButton />
-                </>
+                  <UserButton afterSignOutUrl="/" />
+                </div>
               ) : (
-                <>
+                <div className="flex items-center gap-4">
                   <SignInButton mode="modal">
-                    <button className="text-sm font-medium text-gray-700 hover:text-primary transition-colors">
+                    <button className="text-sm font-bold text-gray-600 hover:text-primary transition-all px-4 py-2 rounded-xl hover:bg-gray-50 active:scale-95">
                       Log in
                     </button>
                   </SignInButton>
                   <SignUpButton mode="modal">
-                    <button className="bg-primary hover:bg-primary-hover text-white px-5 py-2.5 rounded-xl text-sm font-medium transition-all shadow-lg shadow-primary/20">
+                    <button className="bg-primary hover:bg-primary-hover text-white px-6 py-3 rounded-2xl text-sm font-bold transition-all shadow-lg shadow-primary/20 hover:scale-105 active:scale-95">
                       Sign up
                     </button>
                   </SignUpButton>
-                </>
+                </div>
               )}
             </div>
           </div>
@@ -109,9 +109,9 @@ export default function LandingPage() {
                 <span>Trusted by 10,000+ Patients</span>
               </div>
               
-              <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+              <h1 className="text-5xl lg:text-7xl font-extrabold text-gray-900 leading-tight mb-6 tracking-tight">
                 Your Health, <br />
-                Our <span className="text-primary">Priority</span>
+                Our <span className="gradient-text">Priority</span>
               </h1>
               
               <p className="text-lg text-gray-600 mb-8 max-w-lg leading-relaxed">
@@ -226,14 +226,15 @@ export default function LandingPage() {
             ].map((feature, idx) => (
               <motion.div 
                 key={idx}
-                whileHover={{ y: -5 }}
-                className="premium-card p-6 border border-gray-50"
+                whileHover={{ y: -8, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="premium-card p-8 border border-gray-50 flex flex-col items-start gap-4"
               >
-                <div className={`w-12 h-12 rounded-xl ${feature.bg} ${feature.color} flex items-center justify-center mb-6`}>
-                  <feature.icon size={24} />
+                <div className={`w-14 h-14 rounded-2xl ${feature.bg} ${feature.color} flex items-center justify-center mb-2 shadow-sm`}>
+                  <feature.icon size={28} />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">{feature.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{feature.desc}</p>
+                <h3 className="text-xl font-bold text-gray-900 tracking-tight">{feature.title}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed font-medium">{feature.desc}</p>
               </motion.div>
             ))}
           </div>
