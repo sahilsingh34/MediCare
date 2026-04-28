@@ -109,5 +109,55 @@ export async function updateAppointmentStatus(appointmentId: string, status: "ac
     return { success: false, error: error.message };
   }
 
+  revalidatePath("/patient/appointments");
+  revalidatePath("/doctor/appointments");
+  revalidatePath("/doctor/dashboard");
+
+  return { success: true, data };
+}
+
+export async function cancelAppointment(appointmentId: string) {
+  const supabase = getSupabaseAdmin();
+  
+  const { error } = await (supabase as any)
+    .from("appointments")
+    .delete()
+    .eq("id", appointmentId);
+
+  if (error) {
+    console.error("Cancel appointment error:", error);
+    return { success: false, error: error.message };
+  }
+
+  revalidatePath("/patient/appointments");
+  revalidatePath("/doctor/appointments");
+  revalidatePath("/doctor/dashboard");
+
+  return { success: true };
+}
+
+export async function rescheduleAppointment(appointmentId: string, newDate: string, newTime: string) {
+  const supabase = getSupabaseAdmin();
+  
+  const { data, error } = await (supabase as any)
+    .from("appointments")
+    .update({ 
+      date: newDate, 
+      time: newTime,
+      status: "pending" // Reset status to pending when rescheduled
+    })
+    .eq("id", appointmentId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Reschedule appointment error:", error);
+    return { success: false, error: error.message };
+  }
+
+  revalidatePath("/patient/appointments");
+  revalidatePath("/doctor/appointments");
+  revalidatePath("/doctor/dashboard");
+
   return { success: true, data };
 }

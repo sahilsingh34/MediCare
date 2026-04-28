@@ -13,6 +13,7 @@ import {
   Smile
 } from "lucide-react";
 import { getDoctors } from "@/actions/doctors";
+import HomeSearch from "./HomeSearch";
 
 export default async function PatientHome() {
   const topDoctors = await getDoctors() as any[];
@@ -32,31 +33,14 @@ export default async function PatientHome() {
       {/* Hero Search Banner */}
       <div className="relative rounded-[2rem] overflow-hidden bg-primary px-8 py-12 flex items-center justify-between shadow-lg shadow-primary/20">
         <div className="relative z-10 max-w-lg text-white">
-          <h2 className="text-3xl font-bold mb-4 leading-tight">
-            Find the right doctor <br/> for your health
+          <h2 className="text-3xl md:text-5xl font-bold mb-4 md:mb-6 leading-tight">
+            Find the right doctor <br className="hidden md:block"/> for your health
           </h2>
-          <p className="text-primary-light mb-8 text-sm">
+          <p className="text-primary-light mb-2 text-sm md:text-base font-medium opacity-90">
             Book appointments with top specialists in your area.
           </p>
           
-          {/* Search Bar */}
-          <div className="bg-white rounded-2xl p-2 flex flex-col md:flex-row items-center gap-2 shadow-xl shadow-black/5">
-            <div className="flex-1 flex items-center gap-3 px-4 py-2 border-r border-gray-100 w-full">
-              <Search size={18} className="text-gray-400" />
-              <input type="text" placeholder="Search by specialty, doctor..." className="w-full text-sm focus:outline-none text-gray-900" />
-            </div>
-            <div className="flex-1 flex items-center gap-3 px-4 py-2 border-r border-gray-100 w-full">
-              <MapPin size={18} className="text-gray-400" />
-              <input type="text" placeholder="Location" defaultValue="New Delhi, India" className="w-full text-sm focus:outline-none text-gray-900" />
-            </div>
-            <div className="flex-1 flex items-center gap-3 px-4 py-2 w-full">
-              <Calendar size={18} className="text-gray-400" />
-              <input type="text" placeholder="Select Date" className="w-full text-sm focus:outline-none text-gray-900" />
-            </div>
-            <Link href="/patient/doctors" className="bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded-xl text-sm font-medium transition-colors w-full md:w-auto text-center">
-              Search
-            </Link>
-          </div>
+          <HomeSearch />
         </div>
         
         {/* Background Image/Graphics */}

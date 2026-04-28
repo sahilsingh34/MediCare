@@ -13,6 +13,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
+import AppointmentActions from "./AppointmentActions";
 
 export default async function AppointmentsPage() {
   return (
@@ -119,14 +120,7 @@ async function AppointmentsList() {
             </div>
           </div>
 
-          <div className="mt-6 flex gap-3">
-            <button className="flex-1 bg-gray-50 hover:bg-gray-100 text-gray-700 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-95">
-              Reschedule
-            </button>
-            <button className="flex-1 bg-red-50 hover:bg-red-100 text-red-600 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-95">
-              Cancel
-            </button>
-          </div>
+          <AppointmentActions appointmentId={app.id} />
         </div>
       ))}
     </div>
