@@ -20,8 +20,7 @@ import {
 } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
-import { updateDoctorProfile } from "@/actions/doctors";
-import { supabase } from "@/lib/supabase";
+import { updateDoctorProfile, uploadDoctorPhoto } from "@/actions/doctors";
 
 export default function DoctorSettingsPage() {
   const { user: clerkUser } = useUser();
@@ -64,35 +63,65 @@ export default function DoctorSettingsPage() {
     // Safety timeout
     const timeout = setTimeout(() => {
       setIsUploading(false);
-      setError("Upload timed out. Direct connection to storage failed.");
-    }, 20000);
+      setError("Upload timed out. The server is not responding.");
+    }, 30000);
 
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${clerkUser?.id || 'temp'}-${Date.now()}.${fileExt}`;
-      const filePath = `${fileName}`;
+      // Step 1: Compress the image on the client
+      const compressImage = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = (event) => {
+            const img = new (window as any).Image();
+            img.src = event.target?.result;
+            img.onload = () => {
+              const canvas = document.createElement('canvas');
+              const MAX_WIDTH = 1200;
+              const MAX_HEIGHT = 1200;
+              let width = img.width;
+              let height = img.height;
 
-      const { data, error: storageError } = await supabase.storage
-        .from("doctor-profiles")
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: false
+              if (width > height) {
+                if (width > MAX_WIDTH) {
+                  height *= MAX_WIDTH / width;
+                  width = MAX_WIDTH;
+                }
+              } else {
+                if (height > MAX_HEIGHT) {
+                  width *= MAX_HEIGHT / height;
+                  height = MAX_HEIGHT;
+                }
+              }
+
+              canvas.width = width;
+              canvas.height = height;
+              const ctx = canvas.getContext('2d');
+              ctx?.drawImage(img, 0, 0, width, height);
+              resolve(canvas.toDataURL('image/jpeg', 0.7)); // 70% quality
+            };
+          };
+          reader.onerror = reject;
         });
+      };
 
-      if (storageError) {
-        throw new Error(storageError.message);
+      console.log("Optimizing photo for secure storage...");
+      const compressedBase64 = await compressImage(file);
+      
+      console.log("Uploading via secure server action...");
+      const result = await uploadDoctorPhoto(compressedBase64, file.name, 'image/jpeg');
+
+      if (result.success && result.url) {
+        setImageUrl(result.url);
+      } else {
+        throw new Error(result.error || "Server rejected the update.");
       }
 
-      const { data: { publicUrl } } = supabase.storage
-        .from("doctor-profiles")
-        .getPublicUrl(filePath);
-
-      setImageUrl(publicUrl);
       clearTimeout(timeout);
       setIsUploading(false);
     } catch (err: any) {
-      console.error("Direct upload error:", err);
-      setError(`Upload failed: ${err.message || "Connection error."}`);
+      console.error("Settings upload error:", err);
+      setError(`Update failed: ${err.message || "Connection error."}`);
       clearTimeout(timeout);
       setIsUploading(false);
     }
